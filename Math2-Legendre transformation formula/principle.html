@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>勒让德变换原理演示</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .principle-demo {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .principle-demo h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .demo-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .demo-canvas {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .demo-canvas canvas {
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            background: #fff;
+        }
+        .formula-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .formula-box h4 {
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        .formula-row {
+            background: rgba(255,255,255,0.1);
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .highlight-result {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 1.1em;
+            border: 2px dashed rgba(255,255,255,0.5);
+        }
+        .explanation-text {
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .step-box {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 150px;
+            border-left: 4px solid #3498db;
+        }
+        .step-box.current {
+            background: #e8f5e9;
+            border-left-color: #2ecc71;
+        }
+        .step-box .step-num {
+            font-weight: bold;
+            color: #3498db;
+            font-size: 1.2em;
+        }
+        .step-box.current .step-num {
+            color: #2ecc71;
+        }
+        .interactive-area {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .interactive-area canvas {
+            cursor: crosshair;
+        }
+        .math-equation {
+            font-family: 'Times New Roman', serif;
+            font-size: 1.1em;
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>勒让德变换原理：切线截距</h1>
+            <p class="subtitle">理解为什么切线与 y 轴的交点等于 -g(p)</p>
+        </header>
+
+        <section class="principle-demo">
+            <h3>🎯 核心问题</h3>
+            <p class="explanation-text">
+                为什么勒让德变换的几何意义可以用"切线与 y 轴的截距"来表示？
+                让我们一步步推导这个关系。
+            </p>
+
+            <div class="formula-box">
+                <h4>📐 推导过程</h4>
+                
+                <div class="formula-row">
+                    <strong>步骤 1:</strong> 切线方程（点斜式）<br>
+                    y - f(x) = p · (x' - x)
+                </div>
+                
+                <div class="formula-row">
+                    <strong>步骤 2:</strong> 令 x' = 0 求 y 轴交点<br>
+                    y - f(x) = p · (0 - x) = -p·x<br>
+                    y = f(x) - p·x
+                </div>
+                
+                <div class="formula-row">
+                    <strong>步骤 3:</strong> 勒让德变换定义<br>
+                    g(p) = x·p - f(x)
+                </div>
+                
+                <div class="highlight-result">
+                    <strong>结论:</strong><br>
+                    y = f(x) - p·x = -(p·x - f(x)) = -g(p) ✓
+                </div>
+            </div>
+
+            <h3>🎮 交互演示</h3>
+            <p class="explanation-text">
+                在下图中拖动红色切点，观察切线如何变化，以及 y 轴截距与 g(p) 的对应关系：
+            </p>
+            
+            <div class="interactive-area">
+                <canvas id="demoCanvas" width="700" height="500"></canvas>
+            </div>
+            
+            <div class="info-panel" style="justify-content: center;">
+                <div class="info-card">
+                    <h4>切点信息</h4>
+                    <p>x = <span id="demoX">0.00</span></p>
+                    <p>f(x) = <span id="demoFx">0.00</span></p>
+                    <p>斜率 p = <span id="demoP">0.00</span></p>
+                </div>
+                <div class="info-card">
+                    <h4>几何关系</h4>
+                    <p>y轴截距 = <span id="demoYIntercept">0.00</span></p>
+                    <p>关系: 截距 = -g(p)</p>
+                </div>
+                <div class="info-card result">
+                    <h4>勒让德变换结果</h4>
+                    <p class="formula">g(p) = x·p - f(x)</p>
+                    <p class="result-value">= <span id="demoG">0.00</span></p>
+                </div>
+            </div>
+
+            <h3>💡 直观理解</h3>
+            <div class="step-indicator">
+                <div class="step-box current">
+                    <div class="step-num">① 选择 x</div>
+                    <div>在函数上选点</div>
+                </div>
+                <div class="step-box current">
+                    <div class="step-num">② 求 p</div>
+                    <div>计算导数值</div>
+                </div>
+                <div class="step-box current">
+                    <div class="step-num">③ 作切线</div>
+                    <div>过点作切线</div>
+                </div>
+                <div class="step-box current">
+                    <div class="step-num">④ 找截距</div>
+                    <div>切线与 y 轴交点</div>
+                </div>
+                <div class="step-box current">
+                    <div class="step-num">⑤ 得结果</div>
+                    <div>截距 = -g(p)</div>
+                </div>
+            </div>
+
+            <div class="formula-box">
+                <h4>🔑 关键洞见</h4>
+                <p style="line-height: 1.8; margin-bottom: 15px;">
+                    勒让德变换的几何本质是：<strong>用切线的斜率 p 作为新坐标，用切线截距的相反数作为新函数值</strong>。
+                </p>
+                <p style="line-height: 1.8;">
+                    这样做的好处是：<br>
+                    对于凸函数，每个斜率 p 对应唯一的切点 x，也对应唯一的变换值 g(p)。<br>
+                    变换后的函数 g(p) 完全保留了原函数 f(x) 的信息，但用"斜率空间"来描述。
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('demoCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const PLOT_RANGE = {
+            xMin: -4,
+            xMax: 4,
+            yMin: -4,
+            yMax: 8
+        };
+        
+        let currentX = 1.5;
+        let isDragging = false;
+        
+        const f = x => x * x;
+        const df = x => 2 * x;
+        
+        function toCanvasX(x) {
+            return (x - PLOT_RANGE.xMin) / (PLOT_RANGE.xMax - PLOT_RANGE.xMin) * canvas.width;
+        }
+        
+        function toCanvasY(y) {
+            return canvas.height - (y - PLOT_RANGE.yMin) / (PLOT_RANGE.yMax - PLOT_RANGE.yMin) * canvas.height;
+        }
+        
+        function fromCanvasX(px) {
+            return PLOT_RANGE.xMin + px / canvas.width * (PLOT_RANGE.xMax - PLOT_RANGE.xMin);
+        }
+        
+        function drawGrid() {
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            
+            for (let x = Math.ceil(PLOT_RANGE.xMin); x <= PLOT_RANGE.xMax; x++) {
+                ctx.beginPath();
+                ctx.moveTo(toCanvasX(x), 0);
+                ctx.lineTo(toCanvasX(x), canvas.height);
+                ctx.stroke();
+            }
+            
+            for (let y = Math.ceil(PLOT_RANGE.yMin); y <= PLOT_RANGE.yMax; y++) {
+                ctx.beginPath();
+                ctx.moveTo(0, toCanvasY(y));
+                ctx.lineTo(canvas.width, toCanvasY(y));
+                ctx.stroke();
+            }
+            
+            ctx.strokeStyle = '#666';
+            ctx.lineWidth = 2;
+            
+            const y0 = toCanvasY(0);
+            ctx.beginPath();
+            ctx.moveTo(0, y0);
+            ctx.lineTo(canvas.width, y0);
+            ctx.stroke();
+            
+            const x0 = toCanvasX(0);
+            ctx.beginPath();
+            ctx.moveTo(x0, 0);
+            ctx.lineTo(x0, canvas.height);
+            ctx.stroke();
+            
+            ctx.fillStyle = '#888';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            
+            for (let x = Math.ceil(PLOT_RANGE.xMin); x <= PLOT_RANGE.xMax; x++) {
+                ctx.fillText(x.toString(), toCanvasX(x), y0 + 20);
+            }
+            
+            ctx.textAlign = 'right';
+            for (let y = Math.ceil(PLOT_RANGE.yMin); y <= PLOT_RANGE.yMax; y++) {
+                ctx.fillText(y.toString(), x0 - 8, toCanvasY(y) + 4);
+            }
+        }
+        
+        function drawFunction() {
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 3;
+            
+            ctx.beginPath();
+            const steps = 500;
+            const xMin = PLOT_RANGE.xMin;
+            const xMax = PLOT_RANGE.xMax;
+            let started = false;
+            
+            for (let i = 0; i <= steps; i++) {
+                const x = xMin + (xMax - xMin) * i / steps;
+                const y = f(x);
+                
+                if (y < PLOT_RANGE.yMin - 2 || y > PLOT_RANGE.yMax + 2) {
+                    started = false;
+                    continue;
+                }
+                
+                const px = toCanvasX(x);
+                const py = toCanvasY(y);
+                
+                if (!started) {
+                    ctx.moveTo(px, py);
+                    started = true;
+                } else {
+                    ctx.lineTo(px, py);
+                }
+            }
+            ctx.stroke();
+        }
+        
+        function drawTangent() {
+            const y = f(currentX);
+            const p = df(currentX);
+            const g = currentX * p - y;
+            const yIntercept = -g;
+            
+            const x1 = PLOT_RANGE.xMin - 1;
+            const x2 = PLOT_RANGE.xMax + 1;
+            const y1 = y + p * (x1 - currentX);
+            const y2 = y + p * (x2 - currentX);
+            
+            // 切线
+            ctx.strokeStyle = '#e74c3c';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([8, 4]);
+            ctx.beginPath();
+            ctx.moveTo(toCanvasX(x1), toCanvasY(y1));
+            ctx.lineTo(toCanvasX(x2), toCanvasY(y2));
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // 切点
+            ctx.fillStyle = '#e74c3c';
+            ctx.beginPath();
+            ctx.arc(toCanvasX(currentX), toCanvasY(y), 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 12px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('x', toCanvasX(currentX), toCanvasY(y));
+            
+            // y轴截距点
+            if (yIntercept > PLOT_RANGE.yMin - 2 && yIntercept < PLOT_RANGE.yMax + 2) {
+                ctx.fillStyle = '#9b59b6';
+                ctx.beginPath();
+                ctx.arc(toCanvasX(0), toCanvasY(yIntercept), 10, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#fff';
+                ctx.fillText('-g(p)', toCanvasX(0), toCanvasY(yIntercept));
+            }
+            
+            // 标注
+            ctx.fillStyle = '#e74c3c';
+            ctx.font = 'bold 14px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText(`切线斜率 p = ${p.toFixed(2)}`, toCanvasX(currentX) + 15, toCanvasY(y) - 25);
+            ctx.fillText(`y轴截距 = ${yIntercept.toFixed(2)}`, toCanvasX(currentX) + 15, toCanvasY(y) - 8);
+            
+            // 公式标注
+            ctx.fillStyle = '#9b59b6';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText(`因为 y = f(x) - p·x`, 50, 40);
+            ctx.fillText(`所以 y = ${y.toFixed(2)} - ${p.toFixed(2)}·${currentX.toFixed(2)} = ${yIntercept.toFixed(2)}`, 50, 60);
+            ctx.fillText(`截距 = -g(p) = -${g.toFixed(2)}`, 50, 85);
+            
+            // 更新信息
+            document.getElementById('demoX').textContent = currentX.toFixed(2);
+            document.getElementById('demoFx').textContent = y.toFixed(2);
+            document.getElementById('demoP').textContent = p.toFixed(2);
+            document.getElementById('demoYIntercept').textContent = yIntercept.toFixed(2);
+            document.getElementById('demoG').textContent = g.toFixed(2);
+        }
+        
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid();
+            drawFunction();
+            drawTangent();
+        }
+        
+        function handleMouseMove(e) {
+            if (!isDragging) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const px = e.clientX - rect.left;
+            let x = fromCanvasX(px);
+            x = Math.max(-3, Math.min(3, x));
+            
+            currentX = x;
+            render();
+        }
+        
+        canvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            handleMouseMove(e);
+        });
+        
+        document.addEventListener('mousemove', handleMouseMove);
+        
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+        
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            isDragging = true;
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const px = touch.clientX - rect.left;
+            let x = fromCanvasX(px);
+            x = Math.max(-3, Math.min(3, x));
+            currentX = x;
+            render();
+        });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!isDragging) return;
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const px = touch.clientX - rect.left;
+            let x = fromCanvasX(px);
+            x = Math.max(-3, Math.min(3, x));
+            currentX = x;
+            render();
+        });
+        
+        document.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            render();
+        });
+    </script>
+</body>
+</html>

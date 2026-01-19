@@ -344,91 +344,91 @@ class RiemannCalculator {
         if (manifoldType === 'circle') {
             calculationSteps = `
                 <strong>具体计算步骤:</strong><br>
-                1. 参数化映射公式: $\sigma(u) = \left( \cos(2\pi u), \sin(2\pi u), 0 \right)$<br>
+                1. 参数化映射公式: $\\sigma(u) = \\left( \\cos(2\\pi u), \\sin(2\\pi u), 0 \\right)$<br>
                 2. 代入参数值: u = ${formatNum(u)}<br>
                 3. 计算中间值:<br>
-                   - $2\pi u = 2\pi \times ${formatNum(u)} = ${formatNum(2 * Math.PI * u)}$<br>
-                   - $\cos(2\pi u) = \cos(${formatNum(2 * Math.PI * u)}) = ${formatNum(Math.cos(2 * Math.PI * u))}$<br>
-                   - $\sin(2\pi u) = \sin(${formatNum(2 * Math.PI * u)}) = ${formatNum(Math.sin(2 * Math.PI * u))}$<br>
+                   - $2\\pi u = 2\\pi \\times ${formatNum(u)} = ${formatNum(2 * Math.PI * u)}$<br>
+                   - $\\cos(2\\pi u) = \\cos(${formatNum(2 * Math.PI * u)}) = ${formatNum(Math.cos(2 * Math.PI * u))}$<br>
+                   - $\\sin(2\\pi u) = \\sin(${formatNum(2 * Math.PI * u)}) = ${formatNum(Math.sin(2 * Math.PI * u))}$<br>
                 4. 计算坐标值:<br>
-                   - $x = \cos(2\pi u) = ${formatNum(Math.cos(2 * Math.PI * u))} = ${formatNum(point.x)}$<br>
-                   - $y = \sin(2\pi u) = ${formatNum(Math.sin(2 * Math.PI * u))} = ${formatNum(point.y)}$<br>
+                   - $x = \\cos(2\\pi u) = ${formatNum(Math.cos(2 * Math.PI * u))} = ${formatNum(point.x)}$<br>
+                   - $y = \\sin(2\\pi u) = ${formatNum(Math.sin(2 * Math.PI * u))} = ${formatNum(point.y)}$<br> 
                    - $z = 0$<br>`;
         } else if (manifoldType === 'line') {
             calculationSteps = `
                 <strong>具体计算步骤:</strong><br>
-                1. 参数化映射公式: $\sigma(u) = \left( u \times 4 - 2, 0, 0 \right)$<br>
+                1. 参数化映射公式: $\\sigma(u) = \\left( u \\times 4 - 2, 0, 0 \\right)$<br>
                 2. 代入参数值: u = ${formatNum(u)}<br>
                 3. 计算坐标值:<br>
-                   - $x = u \times 4 - 2 = ${formatNum(u)} \times 4 - 2 = ${formatNum(point.x)}$<br>
+                   - $x = u \\times 4 - 2 = ${formatNum(u)} \\times 4 - 2 = ${formatNum(point.x)}$<br>
                    - $y = 0$<br>
                    - $z = 0$<br>`;
         } else if (manifoldType === 'helix') {
             calculationSteps = `
                 <strong>具体计算步骤:</strong><br>
-                1. 参数化映射公式: $\sigma(u) = \left( \cos(8\pi u), \sin(8\pi u), 0.125\pi u \right)$<br>
+                1. 参数化映射公式: $\\sigma(u) = \\left( \\cos(8\\pi u), \\sin(8\\pi u), 0.125\\pi u \\right)$<br>
                 2. 代入参数值: u = ${formatNum(u)}<br>
                 3. 计算中间值:<br>
-                   - $8\pi u = 8\pi \times ${formatNum(u)} = ${formatNum(8 * Math.PI * u)}$<br>
-                   - $0.125\pi u = 0.125\pi \times ${formatNum(u)} = ${formatNum(0.125 * Math.PI * u)}$<br>
-                   - $\cos(8\pi u) = \cos(${formatNum(8 * Math.PI * u)}) = ${formatNum(Math.cos(8 * Math.PI * u))}$<br>
-                   - $\sin(8\pi u) = \sin(${formatNum(8 * Math.PI * u)}) = ${formatNum(Math.sin(8 * Math.PI * u))}$<br>
+                   - $8\\pi u = 8\\pi \\times ${formatNum(u)} = ${formatNum(8 * Math.PI * u)}$<br>
+                   - $0.125\\pi u = 0.125\\pi \\times ${formatNum(u)} = ${formatNum(0.125 * Math.PI * u)}$<br>
+                   - $\\cos(8\\pi u) = \\cos(${formatNum(8 * Math.PI * u)}) = ${formatNum(Math.cos(8 * Math.PI * u))}$<br>
+                   - $\\sin(8\\pi u) = \\sin(${formatNum(8 * Math.PI * u)}) = ${formatNum(Math.sin(8 * Math.PI * u))}$<br>
                 4. 计算坐标值:<br>
-                   - $x = \cos(8\pi u) = ${formatNum(Math.cos(8 * Math.PI * u))} = ${formatNum(point.x)}$<br>
-                   - $y = \sin(8\pi u) = ${formatNum(Math.sin(8 * Math.PI * u))} = ${formatNum(point.y)}$<br>
-                   - $z = 0.125\pi u = ${formatNum(0.125 * Math.PI * u)} = ${formatNum(point.z)}$<br>`;
+                   - $x = \\cos(8\\pi u) = ${formatNum(Math.cos(8 * Math.PI * u))} = ${formatNum(point.x)}$<br>
+                   - $y = \\sin(8\\pi u) = ${formatNum(Math.sin(8 * Math.PI * u))} = ${formatNum(point.y)}$<br>
+                   - $z = 0.125\\pi u = ${formatNum(0.125 * Math.PI * u)} = ${formatNum(point.z)}$<br>`;
         } else if (manifoldType === 'sphere') {
             calculationSteps = `
                 <strong>具体计算步骤:</strong><br>
-                1. 参数化映射公式: $\sigma(u, v) = \left( R\sin(u\pi)\cos(v\pi), R\sin(u\pi)\sin(v\pi), R\cos(u\pi) \right)$ (R=1)<br>
+                1. 参数化映射公式: $\\sigma(u, v) = \\left( R\\sin(u\\pi)\\cos(v\\pi), R\\sin(u\\pi)\\sin(v\\pi), R\\cos(u\\pi) \\right)$ (R=1)<br>
                 2. 代入参数值: u = ${formatNum(u)}, v = ${formatNum(v)}<br>
                 3. 计算中间值:<br>
-                   - $u\pi = ${formatNum(u)} \times \pi = ${formatNum(u * Math.PI)}$<br>
-                   - $v\pi = ${formatNum(v)} \times \pi = ${formatNum(v * Math.PI)}$<br>
-                   - $\sin(u\pi) = \sin(${formatNum(u * Math.PI)}) = ${formatNum(Math.sin(u * Math.PI))}$<br>
-                   - $\cos(v\pi) = \cos(${formatNum(v * Math.PI)}) = ${formatNum(Math.cos(v * Math.PI))}$<br>
-                   - $\sin(v\pi) = \sin(${formatNum(v * Math.PI)}) = ${formatNum(Math.sin(v * Math.PI))}$<br>
-                   - $\cos(u\pi) = \cos(${formatNum(u * Math.PI)}) = ${formatNum(Math.cos(u * Math.PI))}$<br>
+                   - $u\\pi = ${formatNum(u)} \\times \\pi = ${formatNum(u * Math.PI)}$<br>
+                   - $v\\pi = ${formatNum(v)} \\times \\pi = ${formatNum(v * Math.PI)}$<br>
+                   - $\\sin(u\\pi) = \\sin(${formatNum(u * Math.PI)}) = ${formatNum(Math.sin(u * Math.PI))}$<br>
+                   - $\\cos(v\\pi) = \\cos(${formatNum(v * Math.PI)}) = ${formatNum(Math.cos(v * Math.PI))}$<br>
+                   - $\\sin(v\\pi) = \\sin(${formatNum(v * Math.PI)}) = ${formatNum(Math.sin(v * Math.PI))}$<br>
+                   - $\\cos(u\\pi) = \\cos(${formatNum(u * Math.PI)}) = ${formatNum(Math.cos(u * Math.PI))}$<br>
                 4. 计算坐标值:<br>
-                   - $x = \sin(u\pi)\cos(v\pi) = ${formatNum(Math.sin(u * Math.PI))} \times ${formatNum(Math.cos(v * Math.PI))} = ${formatNum(point.x)}$<br>
-                   - $y = \sin(u\pi)\sin(v\pi) = ${formatNum(Math.sin(u * Math.PI))} \times ${formatNum(Math.sin(v * Math.PI))} = ${formatNum(point.y)}$<br>
-                   - $z = \cos(u\pi) = ${formatNum(Math.cos(u * Math.PI))} = ${formatNum(point.z)}$<br>`;
+                   - $x = \\sin(u\\pi)\cos(v\\pi) = ${formatNum(Math.sin(u * Math.PI))} \\times ${formatNum(Math.cos(v * Math.PI))} = ${formatNum(point.x)}$<br>
+                   - $y = \\sin(u\\pi)\sin(v\\pi) = ${formatNum(Math.sin(u * Math.PI))} \\times ${formatNum(Math.sin(v * Math.PI))} = ${formatNum(point.y)}$<br>
+                   - $z = \\cos(u\\pi) = ${formatNum(Math.cos(u * Math.PI))} = ${formatNum(point.z)}$<br>`;
         } else if (manifoldType === 'torus') {
             calculationSteps = `
                 <strong>具体计算步骤:</strong><br>
-                1. 参数化映射公式: $\sigma(u, v) = \left( (R + r\cos(2\pi v))\cos(2\pi u), (R + r\cos(2\pi v))\sin(2\pi u), r\sin(2\pi v) \right)$ (R=2, r=1)<br>
+                1. 参数化映射公式: $\\sigma(u, v) = \\left( (R + r\\cos(2\\pi v))\\cos(2\\pi u), (R + r\\cos(2\\pi v))\\sin(2\\pi u), r\\sin(2\\pi v) \\right)$ (R=2, r=1)<br>
                 2. 代入参数值: u = ${formatNum(u)}, v = ${formatNum(v)}<br>
                 3. 计算中间值:<br>
-                   - $2\pi u = 2\pi \times ${formatNum(u)} = ${formatNum(2 * Math.PI * u)}$<br>
-                   - $2\pi v = 2\pi \times ${formatNum(v)} = ${formatNum(2 * Math.PI * v)}$<br>
-                   - $\cos(2\pi v) = \cos(${formatNum(2 * Math.PI * v)}) = ${formatNum(Math.cos(2 * Math.PI * v))}$<br>
-                   - $R + r\cos(2\pi v) = 2 + 1 \times ${formatNum(Math.cos(2 * Math.PI * v))} = ${formatNum(2 + Math.cos(2 * Math.PI * v))}$<br>
+                   - $2\\pi u = 2\\pi \\times ${formatNum(u)} = ${formatNum(2 * Math.PI * u)}$<br>
+                   - $2\\pi v = 2\\pi \\times ${formatNum(v)} = ${formatNum(2 * Math.PI * v)}$<br>
+                   - $\\cos(2\\pi v) = \\cos(${formatNum(2 * Math.PI * v)}) = ${formatNum(Math.cos(2 * Math.PI * v))}$<br>
+                   - $R + r\\cos(2\\pi v) = 2 + 1 \\times ${formatNum(Math.cos(2 * Math.PI * v))} = ${formatNum(2 + Math.cos(2 * Math.PI * v))}$<br>
                 4. 计算坐标值:<br>
-                   - $x = (R + r\cos(2\pi v))\cos(2\pi u) = ${formatNum(2 + Math.cos(2 * Math.PI * v))} \times ${formatNum(Math.cos(2 * Math.PI * u))} = ${formatNum(point.x)}$<br>
-                   - $y = (R + r\cos(2\pi v))\sin(2\pi u) = ${formatNum(2 + Math.cos(2 * Math.PI * v))} \times ${formatNum(Math.sin(2 * Math.PI * u))} = ${formatNum(point.y)}$<br>
-                   - $z = r\sin(2\pi v) = 1 \times ${formatNum(Math.sin(2 * Math.PI * v))} = ${formatNum(point.z)}$<br>`;
+                   - $x = (R + r\\cos(2\\pi v))\\cos(2\\pi u) = ${formatNum(2 + Math.cos(2 * Math.PI * v))} \\times ${formatNum(Math.cos(2 * Math.PI * u))} = ${formatNum(point.x)}$<br>
+                   - $y = (R + r\\cos(2\\pi v))\\sin(2\\pi u) = ${formatNum(2 + Math.cos(2 * Math.PI * v))} \\times ${formatNum(Math.sin(2 * Math.PI * u))} = ${formatNum(point.y)}$<br>
+                   - $z = r\\sin(2\\pi v) = 1 \\times ${formatNum(Math.sin(2 * Math.PI * v))} = ${formatNum(point.z)}$<br>`;
         } else if (manifoldType === 'plane') {
             calculationSteps = `
                 <strong>具体计算步骤:</strong><br>
-                1. 参数化映射公式: $\sigma(u, v) = \left( u \times 4 - 2, v \times 4 - 2, 0 \right)$<br>
+                1. 参数化映射公式: $\\sigma(u, v) = \\left( u \times 4 - 2, v \\times 4 - 2, 0 \right)$<br>
                 2. 代入参数值: u = ${formatNum(u)}, v = ${formatNum(v)}<br>
                 3. 计算坐标值:<br>
-                   - $x = u \times 4 - 2 = ${formatNum(u)} \times 4 - 2 = ${formatNum(point.x)}$<br>
-                   - $y = v \times 4 - 2 = ${formatNum(v)} \times 4 - 2 = ${formatNum(point.y)}$<br>
+                   - $x = u \\times 4 - 2 = ${formatNum(u)} \times 4 - 2 = ${formatNum(point.x)}$<br>
+                   - $y = v \\times 4 - 2 = ${formatNum(v)} \times 4 - 2 = ${formatNum(point.y)}$<br>
                    - $z = 0$<br>`;
         } else if (manifoldType === 'cylinder') {
             calculationSteps = `
                 <strong>具体计算步骤:</strong><br>
-                1. 参数化映射公式: $\sigma(u, v) = \left( \cos(u \times 2\pi), \sin(u \times 2\pi), v \times 4 - 2 \right)$<br>
+                1. 参数化映射公式: $\\sigma(u, v) = \\left( \\cos(u \\times 2\\pi), \\sin(u \\times 2\\pi), v \\times 4 - 2 \\right)$<br>
                 2. 代入参数值: u = ${formatNum(u)}, v = ${formatNum(v)}<br>
                 3. 计算中间值:<br>
-                   - $u \times 2\pi = ${formatNum(u)} \times 2\pi = ${formatNum(u * 2 * Math.PI)}$<br>
-                   - $\cos(u \times 2\pi) = \cos(${formatNum(u * 2 * Math.PI)}) = ${formatNum(Math.cos(u * 2 * Math.PI))}$<br>
-                   - $\sin(u \times 2\pi) = \sin(${formatNum(u * 2 * Math.PI)}) = ${formatNum(Math.sin(u * 2 * Math.PI))}$<br>
+                   - $u \\times 2\\pi = ${formatNum(u)} \\times 2\\pi = ${formatNum(u * 2 * Math.PI)}$<br>
+                   - $\cos(u \\times 2\pi) = \cos(${formatNum(u * 2 * Math.PI)}) = ${formatNum(Math.cos(u * 2 * Math.PI))}$<br>
+                   - $\sin(u \\times 2\pi) = \sin(${formatNum(u * 2 * Math.PI)}) = ${formatNum(Math.sin(u * 2 * Math.PI))}$<br>
                 4. 计算坐标值:<br>
-                   - $x = \cos(u \times 2\pi) = ${formatNum(Math.cos(u * 2 * Math.PI))} = ${formatNum(point.x)}$<br>
-                   - $y = \sin(u \times 2\pi) = ${formatNum(Math.sin(u * 2 * Math.PI))} = ${formatNum(point.y)}$<br>
-                   - $z = v \times 4 - 2 = ${formatNum(v)} \times 4 - 2 = ${formatNum(point.z)}$<br>`;
+                   - $x = \\cos(u \\times 2\pi) = ${formatNum(Math.cos(u * 2 * Math.PI))} = ${formatNum(point.x)}$<br>
+                   - $y = \\sin(u \\times 2\pi) = ${formatNum(Math.sin(u * 2 * Math.PI))} = ${formatNum(point.y)}$<br>
+                   - $z = v \\times 4 - 2 = ${formatNum(v)} \\times 4 - 2 = ${formatNum(point.z)}$<br>`;
         } else {
             calculationSteps = `
                 <strong>具体计算步骤:</strong><br>
@@ -440,10 +440,10 @@ class RiemannCalculator {
         const paramDisplay = isOneDimensional ?
             `<strong>参数值:</strong> u = ${formatNum(u)}<br><br>
              <strong>参数化映射:</strong><br>
-             $\sigma(u) = \left( ${formatNum(point.x)}, ${formatNum(point.y)}, ${formatNum(point.z)} \right)$<br><br>` :
+             $\\sigma(u) = \\left( ${formatNum(point.x)}, ${formatNum(point.y)}, ${formatNum(point.z)} \\right)$<br><br>` :
             `<strong>参数值:</strong> u = ${formatNum(u)}, v = ${formatNum(v)}<br><br>
              <strong>参数化映射:</strong><br>
-             $\sigma(u, v) = \left( ${formatNum(point.x)}, ${formatNum(point.y)}, ${formatNum(point.z)} \right)$<br><br>`;
+             $\\sigma(u, v) = \\left( ${formatNum(point.x)}, ${formatNum(point.y)}, ${formatNum(point.z)} \\right)$<br><br>`;
 
         return `<strong>流形类型:</strong> ${manifoldNames[manifoldType]} (${manifoldType})<br><br>
                 ${paramDisplay}
@@ -475,29 +475,29 @@ class RiemannCalculator {
         let innerProductHTML = '';
         
         if (dimension === 1) {
-            basisVectorsHTML = `$\frac{\partial \sigma}{\partial u} = \left( ${formatNum(e1.x)}, ${formatNum(e1.y)}, ${formatNum(e1.z)} \right)$<br><br>`;
-            centerDifferenceHTML = `$\frac{\partial \sigma}{\partial u} \approx \frac{\sigma(u+h, v) - \sigma(u-h, v)}{2h}$<br>`;
-            spanHTML = `- 对于一维参数化流形，切空间由单个偏导数张成: $T_p(M) = \text{span}\left\{ \frac{\partial \sigma}{\partial u} \right\}$<br><br>`;
-            calculationHTML = `- 计算 $\sigma(u+h, v) = (${formatNum(pointUPlus.x)}, ${formatNum(pointUPlus.y)}, ${formatNum(pointUPlus.z)})$<br>
-                    - 计算 $\sigma(u-h, v) = (${formatNum(pointUMinus.x)}, ${formatNum(pointUMinus.y)}, ${formatNum(pointUMinus.z)})$<br>
-                    - 计算 $\frac{\partial \sigma}{\partial u} \approx \frac{1}{2h} \left( \sigma(u+h, v) - \sigma(u-h, v) \right) = \left( ${formatNum(e1.x)}, ${formatNum(e1.y)}, ${formatNum(e1.z)} \right)$<br><br>`;
+            basisVectorsHTML = `$\\frac{\\partial \\sigma}{\\partial u} = \\left( ${formatNum(e1.x)}, ${formatNum(e1.y)}, ${formatNum(e1.z)} \\right)$<br><br>`;
+            centerDifferenceHTML = `$\\frac{\\partial \\sigma}{\\partial u} \\approx \\frac{\\sigma(u+h, v) - \\sigma(u-h, v)}{2h}$<br>`;
+            spanHTML = `- 对于一维参数化流形，切空间由单个偏导数张成: $T_p(M) = \\text{span}\\left\\{ \\frac{\\partial \\sigma}{\\partial u} \\right\\}$<br><br>`;
+            calculationHTML = `- 计算 $\\sigma(u+h, v) = (${formatNum(pointUPlus.x)}, ${formatNum(pointUPlus.y)}, ${formatNum(pointUPlus.z)})$<br>
+                    - 计算 $\\sigma(u-h, v) = (${formatNum(pointUMinus.x)}, ${formatNum(pointUMinus.y)}, ${formatNum(pointUMinus.z)})$<br>
+                    - 计算 $\\frac{\\partial \\sigma}{\\partial u} \\approx \\frac{1}{2h} \\left( \\sigma(u+h, v) - \\sigma(u-h, v) \\right) = \\left( ${formatNum(e1.x)}, ${formatNum(e1.y)}, ${formatNum(e1.z)} \\right)$<br><br>`;
             dimensionHTML = `- 切空间的维数等于流形的维数（此处为1维）<br><br>`;
-            innerProductHTML = `- 度量张量 $g_{11} = \left\langle \frac{\partial \sigma}{\partial u}, \frac{\partial \sigma}{\partial u} \right\rangle$ 定义了切空间上的内积<br>
+            innerProductHTML = `- 度量张量 $g_{11} = \\left\\langle \\frac{\\partial \\sigma}{\\partial u}, \\frac{\\partial \\sigma}{\\partial u} \\right\\rangle$ 定义了切空间上的内积<br>
                     - 内积用于计算切向量的长度<br>`;
         } else {
-            basisVectorsHTML = `$\frac{\partial \sigma}{\partial u} = \left( ${formatNum(e1.x)}, ${formatNum(e1.y)}, ${formatNum(e1.z)} \right)$<br><br>
-                    $\frac{\partial \sigma}{\partial v} = \left( ${formatNum(e2.x)}, ${formatNum(e2.y)}, ${formatNum(e2.z)} \right)$<br><br>`;
-            centerDifferenceHTML = `$\frac{\partial \sigma}{\partial u} \approx \frac{\sigma(u+h, v) - \sigma(u-h, v)}{2h}$<br>
-                    $\frac{\partial \sigma}{\partial v} \approx \frac{\sigma(u, v+h) - \sigma(u, v-h)}{2h}$<br>`;
-            spanHTML = `- 对于二维参数化流形，切空间由两个偏导数张成: $T_p(M) = \text{span}\left\{ \frac{\partial \sigma}{\partial u}, \frac{\partial \sigma}{\partial v} \right\}$<br><br>`;
-            calculationHTML = `- 计算 $\sigma(u+h, v) = (${formatNum(pointUPlus.x)}, ${formatNum(pointUPlus.y)}, ${formatNum(pointUPlus.z)})$<br>
-                    - 计算 $\sigma(u-h, v) = (${formatNum(pointUMinus.x)}, ${formatNum(pointUMinus.y)}, ${formatNum(pointUMinus.z)})$<br>
-                    - 计算 $\frac{\partial \sigma}{\partial u} \approx \frac{1}{2h} \left( \sigma(u+h, v) - \sigma(u-h, v) \right) = \left( ${formatNum(e1.x)}, ${formatNum(e1.y)}, ${formatNum(e1.z)} \right)$<br><br>
-                    - 计算 $\sigma(u, v+h) = (${formatNum(pointVPlus.x)}, ${formatNum(pointVPlus.y)}, ${formatNum(pointVPlus.z)})$<br>
-                    - 计算 $\sigma(u, v-h) = (${formatNum(pointVMinus.x)}, ${formatNum(pointVMinus.y)}, ${formatNum(pointVMinus.z)})$<br>
-                    - 同理计算 $\frac{\partial \sigma}{\partial v} = \left( ${formatNum(e2.x)}, ${formatNum(e2.y)}, ${formatNum(e2.z)} \right)$<br><br>`;
+            basisVectorsHTML = `$\\frac{\\partial \\sigma}{\\partial u} = \\left( ${formatNum(e1.x)}, ${formatNum(e1.y)}, ${formatNum(e1.z)} \\right)$<br><br>
+                    $\\frac{\\partial \\sigma}{\\partial v} = \\left( ${formatNum(e2.x)}, ${formatNum(e2.y)}, ${formatNum(e2.z)} \\right)$<br><br>`;
+            centerDifferenceHTML = `$\\frac{\\partial \\sigma}{\\partial u} \\approx \\frac{\\sigma(u+h, v) - \\sigma(u-h, v)}{2h}$<br>
+                    $\\frac{\\partial \\sigma}{\\partial v} \\approx \\frac{\\sigma(u, v+h) - \\sigma(u, v-h)}{2h}$<br>`;
+            spanHTML = `- 对于二维参数化流形，切空间由两个偏导数张成: $T_p(M) = \\text{span}\\left\\{ \\frac{\\partial \\sigma}{\\partial u}, \\frac{\\partial \\sigma}{\\partial v} \\right\\}$<br><br>`;
+            calculationHTML = `- 计算 $\\sigma(u+h, v) = (${formatNum(pointUPlus.x)}, ${formatNum(pointUPlus.y)}, ${formatNum(pointUPlus.z)})$<br>
+                    - 计算 $\\sigma(u-h, v) = (${formatNum(pointUMinus.x)}, ${formatNum(pointUMinus.y)}, ${formatNum(pointUMinus.z)})$<br>
+                    - 计算 $\\frac{\\partial \\sigma}{\\partial u} \\approx \\frac{1}{2h} \\left( \\sigma(u+h, v) - \\sigma(u-h, v) \\right) = \\left( ${formatNum(e1.x)}, ${formatNum(e1.y)}, ${formatNum(e1.z)} \\right)$<br><br> 
+                    - 计算 $\\sigma(u, v+h) = (${formatNum(pointVPlus.x)}, ${formatNum(pointVPlus.y)}, ${formatNum(pointVPlus.z)})$<br>
+                    - 计算 $\\sigma(u, v-h) = (${formatNum(pointVMinus.x)}, ${formatNum(pointVMinus.y)}, ${formatNum(pointVMinus.z)})$<br>
+                    - 同理计算 $\\frac{\\partial \\sigma}{\\partial v} = \\left( ${formatNum(e2.x)}, ${formatNum(e2.y)}, ${formatNum(e2.z)} \\right)$<br><br>`;
             dimensionHTML = `- 切空间的维数等于流形的维数（此处为2维）<br><br>`;
-            innerProductHTML = `- 度量张量 $g_{ij} = \left\langle \frac{\partial \sigma}{\partial u^i}, \frac{\partial \sigma}{\partial u^j} \right\rangle$ 定义了切空间上的内积<br>
+            innerProductHTML = `- 度量张量 $g_{ij} = \\left\\langle \\frac{\\partial \\sigma}{\\partial u^i}, \\frac{\\partial \\sigma}{\\partial u^j} \\right\\rangle$ 定义了切空间上的内积<br>
                     - 内积用于计算切向量的长度和夹角<br>`;
         }
         
@@ -505,25 +505,25 @@ class RiemannCalculator {
         return `<strong>基向量（偏导数）:</strong><br><br>
                 ${basisVectorsHTML}
                 <strong>计算方法:</strong> 中心差分近似<br>
-                $\frac{\partial \sigma}{\partial u} \approx \frac{\sigma(u+h, v) - \sigma(u-h, v)}{2h}$<br>
-                $\frac{\partial \sigma}{\partial v} \approx \frac{\sigma(u, v+h) - \sigma(u, v-h)}{2h}$<br>
+                $\\frac{\\partial \\sigma}{\\partial u} \\approx \\frac{\\sigma(u+h, v) - \\sigma(u-h, v)}{2h}$<br>
+                $\\frac{\\partial \\sigma}{\\partial v} \\approx \\frac{\\sigma(u, v+h) - \\sigma(u, v-h)}{2h}$<br>
                 <strong>其中:</strong> h = 1e-6<br><br>
                 <strong>从流形点到切空间的映射过程:</strong><br><br>
                 <strong>1. 切空间的定义:</strong> 切空间 $T_p(M)$ 是流形 $M$ 在点 $p$ 处的所有切向量组成的向量空间<br><br>
                 <strong>2. 基向量的生成:</strong><br>
-                - 对于参数化流形，切空间由参数的偏导数张成: $T_p(M) = \text{span}\left\{ \frac{\partial \sigma}{\partial u}, \frac{\partial \sigma}{\partial v} \right\}$<br><br>
+                - 对于参数化流形，切空间由参数的偏导数张成: $T_p(M) = \\text{span}\\left\\{ \\frac{\\partial \\sigma}{\\partial u}, \\frac{\\partial \\sigma}{\\partial v} \\right\\}$<br><br>
                 <strong>3. 具体计算过程:</strong><br>
-                - 点 $p = \sigma(${formatNum(u)}, ${formatNum(v)}) = (${formatNum(point.x)}, ${formatNum(point.y)}, ${formatNum(point.z)})$<br>
-                - 计算 $\sigma(u+h, v) = (${formatNum(pointUPlus.x)}, ${formatNum(pointUPlus.y)}, ${formatNum(pointUPlus.z)})$<br>
-                - 计算 $\sigma(u-h, v) = (${formatNum(pointUMinus.x)}, ${formatNum(pointUMinus.y)}, ${formatNum(pointUMinus.z)})$<br>
-                - 计算 $\frac{\partial \sigma}{\partial u} \approx \frac{1}{2h} \left( \sigma(u+h, v) - \sigma(u-h, v) \right) = \left( ${formatNum(e1.x)}, ${formatNum(e1.y)}, ${formatNum(e1.z)} \right)$<br><br>
-                - 同理计算 $\frac{\partial \sigma}{\partial v} = \left( ${formatNum(e2.x)}, ${formatNum(e2.y)}, ${formatNum(e2.z)} \right)$<br><br>
+                - 点 $p = \\sigma(${formatNum(u)}, ${formatNum(v)}) = (${formatNum(point.x)}, ${formatNum(point.y)}, ${formatNum(point.z)})$<br>
+                - 计算 $\\sigma(u+h, v) = (${formatNum(pointUPlus.x)}, ${formatNum(pointUPlus.y)}, ${formatNum(pointUPlus.z)})$<br>
+                - 计算 $\\sigma(u-h, v) = (${formatNum(pointUMinus.x)}, ${formatNum(pointUMinus.y)}, ${formatNum(pointUMinus.z)})$<br>
+                - 计算 $\\frac{\\partial \\sigma}{\\partial u} \\approx \\frac{1}{2h} \\left( \\sigma(u+h, v) - \\sigma(u-h, v) \\right) = \\left( ${formatNum(e1.x)}, ${formatNum(e1.y)}, ${formatNum(e1.z)} \\right)$<br><br>
+                - 同理计算 $\\frac{\\partial \\sigma}{\\partial v} = \\left( ${formatNum(e2.x)}, ${formatNum(e2.y)}, ${formatNum(e2.z)} \\right)$<br><br>
                 <strong>4. 切空间的几何意义:</strong><br>
                 - 切空间在点 $p$ 处与流形相切<br>
                 - 切空间中的向量表示流形上的切方向<br>
                 - 切空间的维数等于流形的维数（此处为2维）<br><br>
                 <strong>5. 度量张量与切空间:</strong><br>
-                - 度量张量 $g_{ij} = \left\langle \frac{\partial \sigma}{\partial u^i}, \frac{\partial \sigma}{\partial u^j} \right\rangle$ 定义了切空间上的内积<br>
+                - 度量张量 $g_{ij} = \\left\\langle \\frac{\\partial \\sigma}{\\partial u^i}, \\frac{\\partial \\sigma}{\\partial u^j} \\right\\rangle$ 定义了切空间上的内积<br>
                 - 内积用于计算切向量的长度和夹角<br>
                 - 切空间的几何性质完全由度量张量决定`;
     }

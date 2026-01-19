@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>为什么需要上确界？</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 25px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        
+        header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        section h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        section h3 {
+            color: #34495e;
+            margin: 20px 0 10px;
+        }
+        
+        .formula-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+            font-family: 'Times New Roman', serif;
+        }
+        
+        .formula {
+            font-size: 1.2em;
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .formula-large {
+            font-size: 1.4em;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 6px;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .key-point {
+            background: #fff3cd;
+            padding: 15px 20px;
+            border-radius: 6px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        
+        .important {
+            background: #f8d7da;
+            padding: 15px 20px;
+            border-radius: 6px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+        
+        .demo-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        canvas {
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            background: #fff;
+            display: block;
+            margin: 15px auto;
+            cursor: crosshair;
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .controls button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .controls button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .controls button.active {
+            background: #3498db;
+            color: #fff;
+        }
+        
+        .info-panel {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .info-card {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-radius: 8px;
+            min-width: 180px;
+            text-align: center;
+        }
+        
+        .info-card h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+        
+        .info-card.result {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: #fff;
+        }
+        
+        .info-card.result h4 {
+            color: #fff;
+            border-bottom-color: rgba(255,255,255,0.5);
+        }
+        
+        .step-list {
+            list-style: none;
+            counter-reset: step;
+        }
+        
+        .step-list li {
+            counter-increment: step;
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 6px;
+            position: relative;
+            padding-left: 60px;
+        }
+        
+        .step-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background: #3498db;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .comparison-table th {
+            background: #3498db;
+            color: #fff;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .arrow {
+            display: inline-block;
+            margin: 0 10px;
+            font-size: 1.5em;
+            color: #3498db;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>为什么勒让德变换需要上确界？</h1>
+            <p>理解 sup_x { px - f(x) } 的真正含义</p>
+        </header>
+
+        <section>
+            <h2>📐 勒让德变换的完整定义</h2>
+            
+            <div class="formula-large">
+                g(p) = sup<sub>x</sub> { px - f(x) }
+            </div>
+            
+            <p>这个定义看起来复杂，让我们一步步分解：</p>
+            
+            <ul class="step-list">
+                <li><strong>px - f(x)</strong>：对于每个 x，计算 p 乘以 x 再减去 f(x)</li>
+                <li><strong>对所有 x 求上确界</strong>：找出所有 x 中，px - f(x) 的最大值</li>
+                <li><strong>结果只与 p 有关</strong>：变换后的函数 g 只依赖于 p，不再依赖 x</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>🔍 为什么不能直接用 xp - f(x)？</h2>
+            
+            <div class="warning-box">
+                <strong>关键问题：</strong>对于给定的 p，哪个 x 能给出最大值？
+            </div>
+            
+            <h3>情况一：凸函数（可以！）</h3>
+            <p>如果 f(x) 是凸函数且可微，那么存在唯一的 x 使得 p = f'(x)，此时：</p>
+            <div class="formula-box">
+                <div class="formula">sup<sub>x</sub> { px - f(x) } = xp - f(x) <span class="arrow">→</span> 其中 p = f'(x)</div>
+            </div>
+            <div class="success-box">
+                ✅ 对于凸函数，切线方法完全正确！因为切线总是在函数上方。
+            </div>
+            
+            <h3>情况二：非凸函数（不可以！）</h3>
+            <p>如果 f(x) 不是凸函数，px - f(x) 可能有多个峰值：</p>
+            
+            <div class="demo-section">
+                <h4>🎮 非凸函数示例</h4>
+                <canvas id="nonConvexCanvas" width="600" height="350"></canvas>
+                <div class="controls">
+                    <button id="animateBtn" class="active">▶ 动画演示</button>
+                    <button id="resetBtn">↺ 重置</button>
+                </div>
+                <p style="text-align: center; margin-top: 10px; color: #666;">
+                    这个函数有多个"山峰"，对于某些 p，多个 x 都能给出较大的 px - f(x) 值
+                </p>
+            </div>
+            
+            <h3>情况三：凹函数（完全相反！）</h3>
+            <p>如果 f(x) 是凹函数，切线在函数<strong>下方</strong>，此时：</p>
+            <div class="formula-box">
+                <div class="formula">对于凹函数：sup<sub>x</sub> { px - f(x) } 不一定等于 xp - f(x)</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>📊 凸函数 vs 非凸函数 对比</h2>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>性质</th>
+                        <th>凸函数</th>
+                        <th>非凸函数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>几何特征</td>
+                        <td>函数图像在任意切线上方</td>
+                        <td>有"山峰"和"山谷"</td>
+                    </tr>
+                    <tr>
+                        <td>导数</td>
+                        <td>单调递增</td>
+                        <td>可能有多个 x 满足 p = f'(x)</td>
+                    </tr>
+                    <tr>
+                        <td>px - f(x)</td>
+                        <td>有唯一的最大值</td>
+                        <td>可能有多个局部最大值</td>
+                    </tr>
+                    <tr>
+                        <td>切线方法</td>
+                        <td>✅ 完全适用</td>
+                        <td>❌ 可能给出错误结果</td>
+                    </tr>
+                    <tr>
+                        <td>上确界</td>
+                        <td>等于 xp - f(x)</td>
+                        <td>需要找到真正的最大值</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>🎯 上确界的真正含义</h2>
+            
+            <div class="highlight">
+                <h3>上确界 vs 最大值</h3>
+                <p><strong>最大值 (maximum)</strong>：函数能达到的最大值</p>
+                <p><strong>上确界 (supremum)</strong>：大于或等于所有值的最小数</p>
+                <p style="margin-top: 10px;"><em>区别在于：函数可能永远达不到上确界，但可以无限接近它。</em></p>
+            </div>
+            
+            <h3>为什么用上确界而不是最大值？</h3>
+            
+            <div class="formula-box">
+                <h4>例子：f(x) = -x² 在 [-1, 1] 上</h4>
+                <p>sup<sub>x∈[-1,1]</sub> { px - (-x²) } = sup { px + x² }</p>
+                <p style="margin-top: 10px;">当 p > 0 时，最大值在 x = 1 处取得</p>
+                <p>当 p < 0 时，最大值在 x = -1 处取得</p>
+                <p style="margin-top: 10px;"><strong>使用上确界可以处理定义域受限的情况！</strong></p>
+            </div>
+            
+            <div class="key-point">
+                <strong>物理直觉：</strong>上确界就像问"这个函数最多能达到多高"，
+                即使实际达不到那个高度，我们仍然可以用它来定义变换。
+            </div>
+        </section>
+
+        <section>
+            <h2>✨ 总结</h2>
+            
+            <div class="success-box">
+                <h3>切线方法成立的条件</h3>
+                <p>当 f(x) 是<strong>凸函数</strong>时，勒让德变换可以简化为：</p>
+                <div class="formula">g(p) = xp - f(x)，其中 p = f'(x)</div>
+                <p style="margin-top: 10px;">因为对于凸函数：</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>每个 p 对应唯一的 x 满足 p = f'(x)</li>
+                    <li>px - f(x) 在这个 x 处取得最大值</li>
+                    <li>切线恰好接触函数，不会在函数下方</li>
+                </ul>
+            </div>
+            
+            <div class="important">
+                <h3>上确界的意义</h3>
+                <p>上确界保证了勒让德变换对<strong>所有函数</strong>都有定义，</p>
+                <p>而不仅仅是凸函数。这是数学上的严谨性要求。</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>📝 本项目中的函数</h2>
+            <p>我们在可视化中使用的函数都是凸函数，所以切线方法完全适用：</p>
+            <ul style="margin-left: 20px; margin-top: 15px;">
+                <li><strong>f(x) = x²</strong>：凸函数 ✓</li>
+                <li><strong>f(x) = x³/3</strong>：在 x > 0 时凸，x < 0 时凹（但我们只显示凸的区域）</li>
+                <li><strong>f(x) = eˣ</strong>：凸函数 ✓</li>
+                <li><strong>f(x) = x ln x - x</strong>：凸函数（在定义域内）✓</li>
+            </ul>
+            <div class="success-box" style="margin-top: 15px;">
+                因此，对于本项目中的所有函数，切线方法都给出正确结果！
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('nonConvexCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const PLOT_RANGE = {
+            xMin: -3,
+            xMax: 3,
+            yMin: -4,
+            yMax: 4
+        };
+        
+        let animationPhase = 0;
+        let isAnimating = true;
+        let animationId = null;
+        
+        // 非凸函数：x³/3 - x（有一个局部极大值和一个局部极小值）
+        function f(x) {
+            return (x * x * x) / 3 - x;
+        }
+        
+        // px - f(x)
+        function h(x, p) {
+            return p * x - f(x);
+        }
+        
+        // 在范围内找最大值
+        function findMax(p) {
+            let maxVal = -Infinity;
+            let maxX = 0;
+            const steps = 1000;
+            for (let i = 0; i <= steps; i++) {
+                const x = PLOT_RANGE.xMin + (PLOT_RANGE.xMax - PLOT_RANGE.xMin) * i / steps;
+                const val = h(x, p);
+                if (val > maxVal) {
+                    maxVal = val;
+                    maxX = x;
+                }
+            }
+            return { val: maxVal, x: maxX };
+        }
+        
+        function toCanvasX(x) {
+            return (x - PLOT_RANGE.xMin) / (PLOT_RANGE.xMax - PLOT_RANGE.xMin) * canvas.width;
+        }
+        
+        function toCanvasY(y) {
+            return canvas.height - (y - PLOT_RANGE.yMin) / (PLOT_RANGE.yMax - PLOT_RANGE.yMin) * canvas.height;
+        }
+        
+        function drawGrid() {
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            
+            for (let x = Math.ceil(PLOT_RANGE.xMin); x <= PLOT_RANGE.xMax; x++) {
+                ctx.beginPath();
+                ctx.moveTo(toCanvasX(x), 0);
+                ctx.lineTo(toCanvasX(x), canvas.height);
+                ctx.stroke();
+            }
+            
+            for (let y = Math.ceil(PLOT_RANGE.yMin); y <= PLOT_RANGE.yMax; y++) {
+                ctx.beginPath();
+                ctx.moveTo(0, toCanvasY(y));
+                ctx.lineTo(canvas.width, toCanvasY(y));
+                ctx.stroke();
+            }
+            
+            ctx.strokeStyle = '#666';
+            ctx.lineWidth = 2;
+            
+            const y0 = toCanvasY(0);
+            ctx.beginPath();
+            ctx.moveTo(0, y0);
+            ctx.lineTo(canvas.width, y0);
+            ctx.stroke();
+            
+            const x0 = toCanvasX(0);
+            ctx.beginPath();
+            ctx.moveTo(x0, 0);
+            ctx.lineTo(x0, canvas.height);
+            ctx.stroke();
+            
+            ctx.fillStyle = '#888';
+            ctx.font = '11px Arial';
+            ctx.textAlign = 'center';
+            for (let x = Math.ceil(PLOT_RANGE.xMin); x <= PLOT_RANGE.xMax; x++) {
+                ctx.fillText(x.toString(), toCanvasX(x), y0 + 18);
+            }
+        }
+        
+        function drawFunction() {
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 3;
+            
+            ctx.beginPath();
+            const steps = 500;
+            let started = false;
+            
+            for (let i = 0; i <= steps; i++) {
+                const x = PLOT_RANGE.xMin + (PLOT_RANGE.xMax - PLOT_RANGE.xMin) * i / steps;
+                const y = f(x);
+                
+                if (y < PLOT_RANGE.yMin - 2 || y > PLOT_RANGE.yMax + 2) {
+                    started = false;
+                    continue;
+                }
+                
+                const px = toCanvasX(x);
+                const py = toCanvasY(y);
+                
+                if (!started) {
+                    ctx.moveTo(px, py);
+                    started = true;
+                } else {
+                    ctx.lineTo(px, py);
+                }
+            }
+            ctx.stroke();
+            
+            // 标注
+            ctx.fillStyle = '#3498db';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText('f(x) = x³/3 - x (非凸函数)', 80, 30);
+        }
+        
+        function drawHFunction(p, color) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            
+            ctx.beginPath();
+            const steps = 500;
+            let started = false;
+            
+            for (let i = 0; i <= steps; i++) {
+                const x = PLOT_RANGE.xMin + (PLOT_RANGE.xMax - PLOT_RANGE.xMin) * i / steps;
+                const y = h(x, p);
+                
+                if (y < PLOT_RANGE.yMin - 2 || y > PLOT_RANGE.yMax + 2) {
+                    started = false;
+                    continue;
+                }
+                
+                const px = toCanvasX(x);
+                const py = toCanvasY(y);
+                
+                if (!started) {
+                    ctx.moveTo(px, py);
+                    started = true;
+                } else {
+                    ctx.lineTo(px, py);
+                }
+            }
+            ctx.stroke();
+        }
+        
+        function drawMaxPoint(p) {
+            const { val, x } = findMax(p);
+            
+            ctx.fillStyle = '#e74c3c';
+            ctx.beginPath();
+            ctx.arc(toCanvasX(x), toCanvasY(val), 10, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 10px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('max', toCanvasX(x), toCanvasY(val));
+            
+            // 标注
+            ctx.fillStyle = '#e74c3c';
+            ctx.font = 'bold 12px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText(`p = ${p.toFixed(2)}`, 50, canvas.height - 20);
+            ctx.fillText(`sup = ${val.toFixed(2)} at x = ${x.toFixed(2)}`, 50, canvas.height - 5);
+            
+            // 画水平线到x轴
+            ctx.strokeStyle = 'rgba(231, 76, 60, 0.3)';
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(toCanvasX(x), toCanvasY(val));
+            ctx.lineTo(toCanvasX(x), toCanvasY(0));
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+        
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid();
+            drawFunction();
+            
+            const p = Math.sin(animationPhase) * 3;
+            
+            // 画 px - f(x) 曲线
+            drawHFunction(p, '#9b59b6');
+            
+            // 标注曲线
+            ctx.fillStyle = '#9b59b6';
+            ctx.font = 'bold 12px Arial';
+            ctx.fillText(`h(x) = px - f(x)`, 50, 55);
+            
+            // 标记最大值
+            drawMaxPoint(p);
+            
+            if (isAnimating) {
+                animationPhase += 0.02;
+                animationId = requestAnimationFrame(render);
+            }
+        }
+        
+        document.getElementById('animateBtn').addEventListener('click', function() {
+            isAnimating = !isAnimating;
+            this.textContent = isAnimating ? '⏸ 暂停' : '▶ 动画演示';
+            if (isAnimating) {
+                render();
+            }
+        });
+        
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            animationPhase = 0;
+            if (!isAnimating) {
+                isAnimating = true;
+                document.getElementById('animateBtn').textContent = '⏸ 暂停';
+                render();
+            }
+        });
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            render();
+        });
+    </script>
+</body>
+</html>

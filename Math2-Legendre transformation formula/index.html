@@ -3,33 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>勒让德变换可视化</title>
+    <title>勒让德变换过程可视化</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>勒让德变换可视化</h1>
+            <h1>勒让德变换过程可视化</h1>
+            <p class="subtitle">观察变换的动态过程：x → p → g(p)</p>
         </header>
         
-        <section class="introduction">
-            <h2>什么是勒让德变换？</h2>
-            <p>勒让德变换是一种数学变换，用于将一个函数 f(x) 转换为其共轭表示 g(p)，其中 p = df/dx 是原函数的导数。几何上，它表示原函数切线截距的相反数。</p>            
-            <div class="formula">
-                <p>变换定义：</p>
-                <p class="math">g(p) = sup_x { px - f(x) }</p>
-                <p>当 f(x) 是凸函数时，上确界由导数条件 p = f'(x) 给出，此时：</p>
-                <p class="math">g(p) = x p - f(x)</p>
+        <section class="process-diagram">
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="step-icon">📍</div>
+                    <div class="step-label">选择切点 x</div>
+                    <div class="step-desc">在原函数上选择一个点</div>
+                </div>
+                <div class="process-arrow">→</div>
+                <div class="process-step">
+                    <div class="step-icon">📐</div>
+                    <div class="step-label">计算斜率 p = f'(x)</div>
+                    <div class="step-desc">求该点的导数（切线斜率）</div>
+                </div>
+                <div class="process-arrow">→</div>
+                <div class="process-step">
+                    <div class="step-icon">✏️</div>
+                    <div class="step-label">绘制切线</div>
+                    <div class="step-desc">过该点作切线</div>
+                </div>
+                <div class="process-arrow">→</div>
+                <div class="process-step">
+                    <div class="step-icon">📏</div>
+                    <div class="step-label">求截距 -g(p)</div>
+                    <div class="step-desc">切线与y轴的截距</div>
+                </div>
+                <div class="process-arrow">→</div>
+                <div class="process-step highlight">
+                    <div class="step-icon">🎯</div>
+                    <div class="step-label">得到 g(p) = xp - f(x)</div>
+                    <div class="step-desc">变换完成！</div>
+                </div>
             </div>
         </section>
         
         <section class="visualization">
             <div class="canvas-container">
                 <div class="canvas-section">
-                    <h3>原函数 f(x)</h3>
-                    <canvas id="originalCanvas" width="600" height="400"></canvas>
+                    <h3>原函数 f(x) 与切线</h3>
+                    <canvas id="originalCanvas" width="600" height="450"></canvas>
                     <div class="controls">
                         <label for="functionSelect">选择函数：</label>
                         <select id="functionSelect">
@@ -42,23 +65,74 @@
                 </div>
                 
                 <div class="canvas-section">
-                    <h3>勒让德变换 g(p)</h3>
-                    <canvas id="transformCanvas" width="600" height="400"></canvas>
-                    <div class="info">
-                        <p>当前点： x = <span id="currentX">0</span></p>
-                        <p>斜率： p = <span id="currentP">0</span></p>
-                        <p>截距： -g(p) = <span id="currentIntercept">0</span></p>
-                        <p>变换值： g(p) = <span id="currentG">0</span></p>
+                    <h3>变换过程：g(p) 的生成</h3>
+                    <canvas id="transformCanvas" width="600" height="450"></canvas>
+                    <div class="controls">
+                        <button id="playBtn">▶ 播放动画</button>
+                        <button id="resetBtn">↺ 重置</button>
+                        <label>
+                            <input type="checkbox" id="showTangentCluster" checked> 显示切线簇
+                        </label>
+                        <label>
+                            <input type="checkbox" id="showProcessLines" checked> 显示过程连线
+                        </label>
                     </div>
                 </div>
+            </div>
+            
+            <div class="info-panel">
+                <div class="info-card">
+                    <h4>当前切点</h4>
+                    <p>x = <span id="currentX">0.00</span></p>
+                    <p>f(x) = <span id="currentFx">0.00</span></p>
+                </div>
+                <div class="info-card">
+                    <h4>切线信息</h4>
+                    <p>斜率 p = <span id="currentP">0.00</span></p>
+                    <p>截距 -g(p) = <span id="currentIntercept">0.00</span></p>
+                </div>
+                <div class="info-card result">
+                    <h4>变换结果</h4>
+                    <p class="formula">g(p) = x·p - f(x)</p>
+                    <p class="result-value">= <span id="currentG">0.00</span></p>
+                </div>
+            </div>
+            
+            <div class="animation-progress">
+                <label>动画进度：</label>
+                <input type="range" id="animationSlider" min="0" max="100" value="0">
+                <span id="animationPercent">0%</span>
             </div>
         </section>
         
         <section class="explanation">
-            <h2>几何直观</h2>
-            <p>在左侧画布上，您可以移动红色点来改变原函数上的切点。对应的切线会实时显示，其斜率为 p，截距为 -g(p)。</p>
-            <p>在右侧画布上，绿色点显示了变换后的函数 g(p)，其中横坐标为斜率 p，纵坐标为变换值 g(p)。</p>
-            <p>勒让德变换的本质是将函数从“位置空间”转换到“斜率空间”，保留了原函数的所有信息，但用不同的变量来描述。</p>
+            <h2>变换过程说明</h2>
+            <div class="explanation-grid">
+                <div class="explanation-item">
+                    <h3>步骤 1: 选择切点</h3>
+                    <p>在原函数 f(x) 上任意选择一点 x，该点的函数值为 f(x)。这一步代表了我们要分析函数的某个局部特征。</p>
+                </div>
+                <div class="explanation-item">
+                    <h3>步骤 2: 计算斜率</h3>
+                    <p>求该点的导数 p = f'(x)。导数表示函数在该点的瞬时变化率，也就是通过该点的切线斜率。</p>
+                </div>
+                <div class="explanation-item">
+                    <h3>步骤 3: 绘制切线</h3>
+                    <p>过选定的点作一条斜率为 p 的直线。这条直线在几何上完美描述了函数在该点的局部线性近似。</p>
+                </div>
+                <div class="explanation-item">
+                    <h3>步骤 4: 求截距</h3>
+                    <p>找到这条切线与 y 轴的交点。这个交点的 y 坐标就是 -g(p)，其中 g(p) 是我们要求的勒让德变换结果。</p>
+                </div>
+                <div class="explanation-item">
+                    <h3>步骤 5: 计算变换</h3>
+                    <p>根据公式 g(p) = x·p - f(x) 计算变换值。横坐标是切线斜率 p，纵坐标是变换值 g(p)。</p>
+                </div>
+                <div class="explanation-item">
+                    <h3>完整映射</h3>
+                    <p>当 x 遍历整个定义域时，每个 x 对应唯一的 p = f'(x)，进而对应唯一的 g(p)。这个映射就是勒让德变换。</p>
+                </div>
+            </div>
         </section>
     </div>
     
