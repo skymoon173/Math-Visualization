@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黎曼度量可视化计算系统</title>
+    <link rel="stylesheet" href="styles-final.css">
+    <script src="mathjax-tex-svg.js" id="MathJax-script" async></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                packages: ['base', 'ams', 'noerrors', 'noundefined']
+            },
+            svg: {
+                fontCache: 'none'  // 避免使用全局字体缓存，防止跟踪保护阻止
+            },
+            startup: {
+                typeset: false,
+                ready: () => {
+                    MathJax.startup.defaultReady();
+                }
+            },
+            options: {
+                enableMenu: false,  // 禁用菜单，减少存储访问
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+                includeHtmlTags: {br: '', wbr: '', '#comment': ''}
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📐 黎曼度量可视化计算系统</h1>
+            <p>微分流形上的度量张量、基向量、曲率计算与可视化</p>
+        </header>
+        
+        <main>
+            <section class="control-panel">
+                <h2>⚙️ 参数设置</h2>
+                
+                <div class="param-group">
+                    <label for="manifoldType">📐 流形类型:</label>
+                    <select id="manifoldType">
+                    <!-- 一维流形 -->
+                    <option value="circle">⭕ 圆 (Circle)</option>
+                    <option value="line">➖ 直线 (Line)</option>
+                    <option value="helix">🐍 螺旋线 (Helix)</option>
+                    
+                    <!-- 二维流形 -->
+                    <option value="sphere" selected>🔵 球面 (Sphere)</option>
+                    <option value="torus">🍩 环面 (Torus)</option>
+                    <option value="hyperboloid">📈 双曲面 (Hyperboloid)</option>
+                    <option value="plane">⬜ 平面 (Plane)</option>
+                    <option value="cylinder">🛢️ 圆柱面 (Cylinder)</option>
+                    <option value="cone">🔺 圆锥面 (Cone)</option>
+                    <option value="mobius">∞ 莫比乌斯带 (Möbius Strip)</option>
+                    <option value="klein">🎀 克莱因瓶 (Klein Bottle)</option>
+                    <option value="paraboloid">📉 抛物面 (Paraboloid)</option>
+                    <option value="ellipsoid">🥚 椭球面 (Ellipsoid)</option>
+                    <option value="sphere3D">🌐 3维球面 (3D Sphere)</option>
+                </select>
+                </div>
+                
+                <div class="param-group" id="coordinatesGroup">
+            <label>📍 点坐标:</label>
+            <div class="coordinate-inputs">
+                <div class="coord-input">
+                    <label for="coordU">u:</label>
+                    <input type="number" id="coordU" value="0.5" min="0" max="1" step="0.1">
+                </div>
+                <div class="coord-input" id="coordVGroup">
+                    <label for="coordV">v:</label>
+                    <input type="number" id="coordV" value="0.5" min="0" max="1" step="0.1">
+                </div>
+            </div>
+            <small id="coordsHint" style="color: #666; display: block; margin-top: 5px;">
+                u ∈ [0, 1]（根据流形类型解释不同）
+            </small>
+        </div>
+        
+        <script>
+        // 动态更新坐标输入提示和默认值
+        document.getElementById('manifoldType').addEventListener('change', function() {
+            const manifoldType = this.value;
+            const coordsHint = document.getElementById('coordsHint');
+            const coordVGroup = document.getElementById('coordVGroup');
+
+            // 一维流形列表
+            const oneDimensionalManifolds = ['circle', 'line', 'helix'];
+
+            if (oneDimensionalManifolds.includes(manifoldType)) {
+                // 一维流形 - 只需要一个参数
+                coordVGroup.style.display = 'none';
+                coordsHint.textContent = 'u ∈ [0, 1]（根据流形类型解释不同）';
+            } else {
+                // 二维流形 - 需要两个参数
+                coordVGroup.style.display = 'block';
+                coordsHint.textContent = 'u ∈ [0, 1], v ∈ [0, 1]（根据流形类型解释不同）';
+            }
+        });
+        </script>
+        
+        <div class="manifold-info">
+            <h4>📐 流形维度说明</h4>
+            <div class="manifold-description">
+                <p>当前系统支持2维流形（曲面），其切空间为2维向量空间。</p>
+                <p>切空间可视化已升级为3D效果，显示基向量 $\left\{ \frac{\partial}{\partial u}, \frac{\partial}{\partial v} \right\}$ 在3D空间中的方向和完整的切平面。</p>
+                
+                <h5>扩展到高维流形</h5>
+                <p><strong>理论可行性：</strong>是的，系统可以扩展到3D或更高维流形！</p>
+                
+                <h5>技术扩展方向：</h5>
+                <ul>
+                    <li><strong>参数化函数：</strong>扩展为接收3个或更多参数（u, v, w, ...）</li>
+                    <li><strong>度量张量：</strong>支持n×n矩阵计算</li>
+                    <li><strong>曲率计算：</strong>实现高维黎曼曲率张量</li>
+                    <li><strong>可视化方案：</strong>
+                        <ul>
+                            <li>3D流形：使用4D到3D的投影或切片可视化</li>
+                            <li>高维数据：使用热力图、等值面、纤维丛可视化</li>
+                            <li>抽象表示：使用图、张量网络等</li>
+                        </ul>
+                    </li>
+                    <li><strong>UI更新：</strong>支持输入更多坐标参数</li>
+                </ul>
+                
+                <h5>示例高维流形：</h5>
+                <ul>
+                    <li><strong>3维球面（S³）：</strong>4D空间中到原点距离为1的点集</li>
+                    <li><strong>3维环面（T³）：</strong>三个圆的笛卡尔积</li>
+                    <li><strong>双曲3维流形：</strong>负曲率的3维空间</li>
+                    <li><strong>闵可夫斯基时空：</strong>3+1维洛伦兹流形</li>
+                </ul>
+                
+                <h5>当前架构的扩展优势：</h5>
+                <ul>
+                    <li>模块化设计，便于添加新的流形类型</li>
+                    <li>基于参数化的统一接口</li>
+                    <li>可扩展的计算框架</li>
+                    <li>灵活的可视化系统</li>
+                </ul>
+            </div>
+        </div>
+                
+                <div class="button-group">
+                    <button id="calculateBtn" class="btn-primary">
+                        <span class="btn-icon">📊</span> 计算度量张量
+                    </button>
+                    <button id="visualizeBtn" class="btn-secondary">
+                        <span class="btn-icon">🎨</span> 3D可视化
+                    </button>
+                </div>
+                
+                <div class="manifold-info" id="manifoldInfo">
+                    <h4>📖 流形说明</h4>
+                    <div class="manifold-description" id="manifoldDescription">
+                        <p>选择流形类型后查看说明</p>
+                    </div>
+                </div>
+                
+                <div class="gaussian-intro">
+                    <h4>📐 高斯曲率介绍</h4>
+                    <div class="gaussian-content">
+                        <p><strong>高斯曲率</strong>（Gaussian Curvature）是曲面在一点处最重要的几何不变量之一。</p>
+                        
+                        <div class="formula-section">
+                            <h5>定义公式</h5>
+                            <div class="formula-block">
+                                $$K = \\frac{\\det(II)}{\\det(I)} = \\frac{LN - M^2}{EG - F^2}$$
+                            </div>
+                            <p>其中 $I = (g_{ij})$ 和 $II = (h_{ij})$ 分别是第一和第二基本形式。</p>
+                        </div>
+                        
+                        <div class="interpretation-section">
+                            <h5>几何意义</h5>
+                            <ul>
+                                <li><strong>$K > 0$</strong>: 椭圆点，曲面局部像球面</li>
+                                <li><strong>$K = 0$</strong>: 抛物点或平坦点，可展曲面</li>
+                                <li><strong>$K < 0$</strong>: 双曲点，曲面局部像马鞍面</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="theorem-section">
+                            <h5>高斯著名定理</h5>
+                            <div class="theorem-block">
+                                <p><strong>高斯绝妙定理（Theorema Egregium）</strong></p>
+                                <p>高斯曲率仅由度量张量决定，是曲面的内蕴几何量。</p>
+                                <p class="highlight">这意味着高斯曲率在等距变换下保持不变！</p>
+                            </div>
+                        </div>
+                        
+                        <div class="examples-section">
+                            <h5>常见曲面曲率</h5>
+                            <table class="curvature-table">
+                                <tr><th>曲面</th><th>高斯曲率</th><th>类型</th></tr>
+                                <tr><td>球面（半径R）</td><td>$K = 1/R^2$</td><td>正常曲率</td></tr>
+                                <tr><td>平面</td><td>$K = 0$</td><td>零曲率</td></tr>
+                                <tr><td>圆柱面</td><td>$K = 0$</td><td>零曲率（可展）</td></tr>
+                                <tr><td>圆锥面（除顶点）</td><td>$K = 0$</td><td>零曲率（可展）</td></tr>
+                                <tr><td>双曲面</td><td>$K < 0$</td><td>负曲率</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="results-panel">
+                <div class="results-header">
+                    <h2>📋 计算结果</h2>
+                    <div class="result-tabs">
+                        <button class="tab-btn active" data-tab="metric">度量张量</button>
+                        <button class="tab-btn" data-tab="basis">基向量</button>
+                        <button class="tab-btn" data-tab="steps">计算步骤</button>
+                        <button class="tab-btn" data-tab="curvature">曲率</button>
+                    </div>
+                </div>
+                
+                <div class="tab-content active" id="tab-metric">
+                    <div class="result-section metric-tensor">
+                        <h3>📐 度量张量 $g_{ij}$</h3>
+                        <div id="metricTensorDisplay"></div>
+                    </div>
+                    
+                    <div class="result-section tensor-product">
+                        <h3>🔄 张量积 $g \\otimes g$</h3>
+                        <div id="tensorProductDisplay"></div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="tab-basis">
+                    <div class="result-section basis-vectors">
+                        <h3>📐 基向量</h3>
+                        <div id="basisVectorsDisplay"></div>
+                    </div>
+                    
+                    <div class="result-section tangent-space-section">
+                        <h3>🎯 切空间几何性质</h3>
+                        <div id="tangentSpaceDetails"></div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="tab-steps">
+                    <div class="result-section calculation-steps-section">
+                        <h3>📝 详细计算步骤</h3>
+                        <div id="calculationStepsDisplay"></div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="tab-curvature">
+                    <div class="result-section curvature-info-section">
+                        <h3>📈 曲率不变量</h3>
+                        <div class="tab-container">
+                            <div id="curvatureDisplay" class="tab-content active"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-section christoffel-symbols-section">
+                        <h3>🔢 克里斯托弗符号 $\\Gamma^k_{ij}$</h3>
+                        <div id="christoffelDisplay"></div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <h3>🎨 流形可视化</h3>
+                    <canvas id="visualizationCanvas" width="700" height="450"></canvas>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>📐 黎曼几何计算系统 | 基于微分几何理论</p>
+        </footer>
+    </div>
+    
+    <script src="detailed-steps.js"></script>
+    <script src="riemann-calculator-full.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise();
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>勒让德变换可视化</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>勒让德变换可视化</h1>
+        </header>
+        
+        <section class="introduction">
+            <h2>什么是勒让德变换？</h2>
+            <p>勒让德变换是一种数学变换，用于将一个函数 f(x) 转换为其共轭表示 g(p)，其中 p = df/dx 是原函数的导数。几何上，它表示原函数切线截距的相反数。</p>            
+            <div class="formula">
+                <p>变换定义：</p>
+                <p class="math">g(p) = sup_x { px - f(x) }</p>
+                <p>当 f(x) 是凸函数时，上确界由导数条件 p = f'(x) 给出，此时：</p>
+                <p class="math">g(p) = x p - f(x)</p>
+            </div>
+        </section>
+        
+        <section class="visualization">
+            <div class="canvas-container">
+                <div class="canvas-section">
+                    <h3>原函数 f(x)</h3>
+                    <canvas id="originalCanvas" width="600" height="400"></canvas>
+                    <div class="controls">
+                        <label for="functionSelect">选择函数：</label>
+                        <select id="functionSelect">
+                            <option value="quadratic">二次函数 f(x) = x²</option>
+                            <option value="cubic">三次函数 f(x) = x³/3</option>
+                            <option value="exponential">指数函数 f(x) = eˣ</option>
+                            <option value="logarithm">对数函数 f(x) = x ln x - x</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="canvas-section">
+                    <h3>勒让德变换 g(p)</h3>
+                    <canvas id="transformCanvas" width="600" height="400"></canvas>
+                    <div class="info">
+                        <p>当前点： x = <span id="currentX">0</span></p>
+                        <p>斜率： p = <span id="currentP">0</span></p>
+                        <p>截距： -g(p) = <span id="currentIntercept">0</span></p>
+                        <p>变换值： g(p) = <span id="currentG">0</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="explanation">
+            <h2>几何直观</h2>
+            <p>在左侧画布上，您可以移动红色点来改变原函数上的切点。对应的切线会实时显示，其斜率为 p，截距为 -g(p)。</p>
+            <p>在右侧画布上，绿色点显示了变换后的函数 g(p)，其中横坐标为斜率 p，纵坐标为变换值 g(p)。</p>
+            <p>勒让德变换的本质是将函数从“位置空间”转换到“斜率空间”，保留了原函数的所有信息，但用不同的变量来描述。</p>
+        </section>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

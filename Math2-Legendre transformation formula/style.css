@@ -1,0 +1,192 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    color: #2c3e50;
+    font-size: 2.5em;
+}
+
+section {
+    margin-bottom: 30px;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+section h2 {
+    color: #34495e;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+section h3 {
+    color: #34495e;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+.introduction p {
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    color: #555;
+}
+
+.formula {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 6px;
+    margin: 20px 0;
+    border-left: 4px solid #3498db;
+}
+
+.formula p {
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.math {
+    font-size: 1.2em;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.visualization {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.canvas-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px 0;
+}
+
+.canvas-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+canvas {
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: crosshair;
+}
+
+.controls {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.controls label {
+    font-weight: 500;
+    color: #555;
+}
+
+.controls select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+.info {
+    margin-top: 15px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #eee;
+}
+
+.info p {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #555;
+}
+
+.info span {
+    font-weight: bold;
+    color: #3498db;
+}
+
+.explanation p {
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    color: #555;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    header h1 {
+        font-size: 2em;
+    }
+    
+    section {
+        padding: 15px;
+    }
+    
+    section h2 {
+        font-size: 1.5em;
+    }
+    
+    section h3 {
+        font-size: 1.2em;
+    }
+    
+    canvas {
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+    }
+    
+    .canvas-container {
+        gap: 20px;
+    }
+    
+    .canvas-section {
+        width: 100%;
+        max-width: 540px;
+    }
+}
