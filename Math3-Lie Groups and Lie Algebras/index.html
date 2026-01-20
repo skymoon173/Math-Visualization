@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>李群与李代数可视化 - 第一性原理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        #container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        #left-panel {
+            width: 480px;
+            background: #16213e;
+            overflow-y: auto;
+            padding: 20px;
+            border-right: 2px solid #0f3460;
+        }
+        
+        #right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            overflow: hidden;
+        }
+        
+        #header {
+            background: #0f3460;
+            padding: 15px 20px;
+            text-align: center;
+        }
+        
+        #header h1 {
+            color: #e94560;
+            font-size: 1.4em;
+            margin-bottom: 5px;
+        }
+        
+        #header p {
+            color: #aaa;
+            font-size: 0.85em;
+        }
+        
+        .topic-section {
+            margin: 20px 0;
+            background: #1a1a2e;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #0f3460;
+        }
+        
+        .topic-header {
+            background: #0f3460;
+            padding: 12px 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+        
+        .topic-header:hover {
+            background: #1a4a7a;
+        }
+        
+        .topic-header h2 {
+            font-size: 1em;
+            color: #e94560;
+        }
+        
+        .topic-header .arrow {
+            transition: transform 0.3s;
+            color: #e94560;
+            font-size: 0.8em;
+        }
+        
+        .topic-header.active .arrow {
+            transform: rotate(180deg);
+        }
+        
+        .topic-content {
+            padding: 15px;
+            display: none;
+        }
+        
+        .topic-content.active {
+            display: block;
+        }
+        
+        .sub-topic {
+            margin: 15px 0;
+            padding: 12px;
+            background: #0f3460;
+            border-radius: 5px;
+        }
+        
+        .sub-topic h3 {
+            color: #53d8fb;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #1a4a7a;
+            padding-bottom: 5px;
+        }
+        
+        .formula-box {
+            background: #0a0a1a;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            border-left: 3px solid #e94560;
+            overflow-x: auto;
+        }
+        
+        .formula-box .matrix {
+            display: inline-block;
+            text-align: center;
+            font-size: 1em;
+            line-height: 1.4;
+            color: #53d8fb;
+        }
+        
+        .formula-title {
+            color: #e94560;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .sub-topic h3 {
+            color: #e94560;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .step-box {
+            background: #0a1628;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 3px solid #53d8fb;
+        }
+        
+        .step-title {
+            color: #53d8fb;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        
+        .step-content {
+            margin: 6px 0;
+            padding-left: 12px;
+            line-height: 1.5;
+            font-size: 0.85em;
+        }
+        
+        .geometry-box {
+            background: #0a1628;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #53d8fb;
+        }
+        
+        .geometry-title {
+            color: #53d8fb;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        
+        .highlight {
+            color: #e94560;
+            font-weight: bold;
+        }
+        
+        .question-box {
+            background: #1a2a4a;
+            border: 1px solid #e94560;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .question-title {
+            color: #e94560;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .question-icon {
+            width: 20px;
+            height: 20px;
+            background: #e94560;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            color: white;
+        }
+        
+        .motivation-box {
+            background: #0d1b2a;
+            border: 1px dashed #53d8fb;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .motivation-title {
+            color: #53d8fb;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        
+        #visualization-container {
+            flex: 1;
+            position: relative;
+            background: #0a0a1a;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        
+        .visualization-row {
+            display: flex;
+            flex: 1;
+            gap: 10px;
+            padding: 10px;
+            min-height: 300px;
+        }
+        
+        .visualization-tabs {
+            display: flex;
+            gap: 0;
+            padding: 8px 10px 0 10px;
+            background: #0f3460;
+        }
+        
+        .tab-btn {
+            background: #16213e;
+            color: #aaa;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+            margin-right: 2px;
+        }
+        
+        .tab-btn:hover {
+            background: #1a4a7a;
+            color: #eee;
+        }
+        
+        .tab-btn.active {
+            background: #16213e;
+            color: #e94560;
+        }
+        
+        .visualization-container {
+            flex: 1;
+            background: #16213e;
+            margin: 0 10px;
+            border-radius: 0 0 8px 8px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 0;
+        }
+        
+        .tab-panel {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+        }
+        
+        .tab-panel.active {
+            display: flex;
+        }
+        
+        .visualization-panel {
+            flex: 1;
+            background: #16213e;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        
+        .manifold-panel {
+            flex: 1;
+            background: #16213e;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        
+        .visualization-header {
+            background: #0f3460;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .visualization-header h3 {
+            margin: 0;
+            font-size: 0.9em;
+            color: #e94560;
+        }
+        
+        .visualization-buttons, .manifold-buttons {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        
+        .btn {
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75em;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #ff6b8a;
+        }
+        
+        .btn.active {
+            background: #53d8fb;
+            color: #0a0a1a;
+        }
+        
+        .manifold-btn {
+            background: #1a1a2e;
+            color: #aaa;
+            border: 1px solid #0f3460;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.3s;
+        }
+        
+        .manifold-btn:hover {
+            background: #0f3460;
+            color: #eee;
+        }
+        
+        .manifold-btn.active {
+            background: #e94560;
+            color: white;
+            border-color: #e94560;
+        }
+        
+        #canvas-container {
+            flex: 1;
+            width: 100%;
+            min-height: 300px;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        #canvas-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+        
+        #manifold-canvas-container {
+            flex: 1;
+            width: 100%;
+            min-height: 300px;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        #manifold-canvas-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+        
+        #algebra-canvas-container {
+            flex: 1;
+            width: 100%;
+            min-height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #algebra-canvas-container canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 100% !important;
+        }
+        
+        .camera-controls-hint {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 6px 10px;
+            background: rgba(15, 52, 96, 0.8);
+            font-size: 0.75em;
+            color: #888;
+        }
+        
+        .camera-controls-hint span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        #controls-panel {
+            background: #0f3460;
+            padding: 10px 15px;
+            margin: 0 10px;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+        
+        #controls-panel h3 {
+            color: #e94560;
+            margin: 0 0 10px 0;
+            font-size: 0.9em;
+        }
+        
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .control-group label {
+            min-width: 70px;
+            color: #aaa;
+            font-size: 0.85em;
+        }
+        
+        input[type="range"] {
+            width: 120px;
+            cursor: pointer;
+        }
+        
+        input[type="number"] {
+            width: 70px;
+            padding: 4px;
+            background: #0a1628;
+            border: 1px solid #1a4a7a;
+            color: #eee;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+        
+        #calculation-panel {
+            background: #0f3460;
+            padding: 12px;
+            margin: 0 10px 10px 10px;
+            border-radius: 8px;
+            flex: 1;
+            min-height: 150px;
+            max-height: none;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        #calculation-panel h3 {
+            color: #e94560;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            flex-shrink: 0;
+        }
+        
+        #calculation-content {
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            line-height: 1.4;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .calc-step {
+            margin: 4px 0;
+            padding: 4px 8px;
+            background: #0a1628;
+            border-radius: 3px;
+        }
+        
+        #algebra-controls-panel {
+            background: #0f3460;
+            padding: 10px 15px;
+            margin: 0 10px;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+        
+        #algebra-controls-panel h3 {
+            color: #e94560;
+            margin: 0 0 10px 0;
+            font-size: 0.9em;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0a0a1a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #0f3460;
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1a4a7a;
+        }
+        
+        .derivation {
+            background: #0f1a2a;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 8px 0;
+            font-size: 0.8em;
+            border-left: 2px solid #4CAF50;
+        }
+        
+        .derivation-title {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        
+        .conclusion {
+            background: #1a2a3a;
+            border: 1px solid #4CAF50;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 8px 0;
+        }
+        
+        .conclusion-title {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="left-panel">
+            <div id="header">
+                <h1>李群与李代数可视化</h1>
+                <p>从第一性原理解释数学结构的起源</p>
+            </div>
+            
+            <!-- 第一部分：群的基本概念 -->
+            <div class="topic-section">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <h2>一、群的基本概念</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="topic-content active">
+                    <div class="sub-topic">
+                        <h3>1.1 群的定义与公理</h3>
+                        <div class="motivation-box">
+                            <div class="motivation-title">为什么需要群？</div>
+                            <p>群是描述"对称性"和"变换"的数学语言。它告诉我们：什么样的变换可以组合？什么样的变换有逆操作？</p>
+                        </div>
+                        <div class="step-box">
+                            <div class="step-title">群的公理化定义</div>
+                            <p class="step-content">群(G, ·)是一个集合G，配备了一个二元运算"·"，满足：</p>
+                            <p class="step-content">① <span class="highlight">封闭性</span>：a·b ∈ G（运算结果仍在群中）</p>
+                            <p class="step-content">② <span class="highlight">结合律</span>：(a·b)·c = a·(b·c)</p>
+                            <p class="step-content">③ <span class="highlight">单位元</span>：∃e ∈ G, e·a = a·e = a</p>
+                            <p class="step-content">④ <span class="highlight">逆元</span>：∀a ∈ G, ∃a⁻¹, a·a⁻¹ = a⁻¹·a = e</p>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">整数加法群 (ℤ, +)</div>
+                            <p>• 封闭：a+b仍是整数</p>
+                            <p>• 结合：(a+b)+c = a+(b+c)</p>
+                            <p>• 单位元：0</p>
+                            <p>• 逆元：-a</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>1.2 矩阵群 GL(n)</h3>
+                        <div class="motivation-box">
+                            <div class="motivation-title">为什么研究矩阵群？</div>
+                            <p>矩阵是线性变换的表示。矩阵群描述了所有可逆线性变换，以及它们如何组合。</p>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">一般线性群 GL(n)</div>
+                            <p>GL(n) = { A ∈ ℝⁿˣⁿ | det(A) ≠ 0 }</p>
+                            <p>• 运算：矩阵乘法</p>
+                            <p>• 单位元：单位矩阵 I</p>
+                            <p>• 逆元：矩阵的逆 A⁻¹</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 第二部分：为什么需要李群 -->
+            <div class="topic-section">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <h2>二、为什么需要李群？</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="topic-content">
+                    <div class="sub-topic">
+                        <h3>2.1 离散群vs连续群</h3>
+                        <div class="question-box">
+                            <div class="question-title">
+                                <span class="question-icon">?</span>
+                                核心问题
+                            </div>
+                            <p>离散群（如对称群）只能描述有限种对称性。但现实世界中存在无限连续的对称性（如旋转可以是任意角度），如何描述？</p>
+                        </div>
+                        <div class="step-box">
+                            <div class="step-title">解决方案：引入光滑结构</div>
+                            <p class="step-content">我们需要一种同时具有：</p>
+                            <p class="step-content">① <span class="highlight">群结构</span>：描述如何组合变换</p>
+                            <p class="step-content">② <span class="highlight">流形结构</span>：描述无限连续的变化</p>
+                            <p class="step-content">这就是李群！</p>
+                        </div>
+                        <div class="geometry-box">
+                            <div class="geometry-title">流形的直观理解</div>
+                            <p>流形 = "局部看起来像欧氏空间"的拓扑空间</p>
+                            <p>• 地球表面是<span class="highlight">2维流形</span>（局部像平面）</p>
+                            <p>• SO(3)是<span class="highlight">3维流形</span>（局部像ℝ³）</p>
+                            <p>• 关键：可以在局部定义坐标、导数、积分</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>2.2 SO(3)的来源</h3>
+                        <div class="motivation-box">
+                            <div class="motivation-title">为什么定义SO(3)？</div>
+                            <p>在三维空间中，旋转是最基本的刚体运动之一。SO(3)精确描述了所有保持原点不变的旋转。</p>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">SO(3)的定义</div>
+                            <p>SO(3) = { R ∈ ℝ³ˣ³ | RᵀR = I, det(R) = 1 }</p>
+                            <p>• RᵀR = I：保持长度和角度（正交性）</p>
+                            <p>• det(R) = 1：保持手性（不反转空间）</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 第三部分：反对称矩阵的起源 -->
+            <div class="topic-section">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <h2>三、反对称矩阵的起源</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="topic-content">
+                    <div class="sub-topic">
+                        <h3>3.1 问题：如何描述SO(3)的局部变化？</h3>
+                        <div class="question-box">
+                            <div class="question-title">
+                                <span class="question-icon">?</span>
+                                为什么会有反对称矩阵？
+                            </div>
+                            <p>我们要问：SO(3)中任意一点附近的"切线方向"是什么？这些切线为什么是反对称矩阵？</p>
+                        </div>
+                        <div class="derivation">
+                            <div class="derivation-title">推导过程</div>
+                            <p>考虑SO(3)中的一条光滑曲线 R(t)，满足 R(0) = I</p>
+                            <p>由于对所有t有 R(t)ᵀR(t) = I，两边对t求导：</p>
+                            <p>⇒ d/dt[R(t)ᵀR(t)] = Ṙ(t)ᵀR(t) + R(t)ᵀṘ(t) = 0</p>
+                            <p>⇒ Ṙ(t)ᵀR(t) = -R(t)ᵀṘ(t)</p>
+                            <p>在 t = 0 处（因为 R(0) = I）：</p>
+                            <p>⇒ Ṙ(0)ᵀ = -Ṙ(0)</p>
+                        </div>
+                        <div class="conclusion">
+                            <div class="conclusion-title">结论</div>
+                            <p>SO(3)在单位元处的切空间由满足 <span class="highlight">Kᵀ = -K</span> 的矩阵组成，这就是<span class="highlight">反对称矩阵</span>！</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>3.2 反对称矩阵的结构</h3>
+                        <div class="step-box">
+                            <div class="step-title">3×3反对称矩阵的形式</div>
+                            <p class="step-content">任意3×3反对称矩阵K可以表示为：</p>
+                            <p class="step-content">K = [  0   -k₃   k₂  ]</p>
+                            <p class="step-content">    [ k₃    0   -k₁  ]</p>
+                            <p class="step-content">    [-k₂   k₁    0   ]</p>
+                            <p class="step-content">只由3个独立参数决定！这正是SO(3)是3维流形的原因。</p>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">旋转向量 ↔ 反对称矩阵</div>
+                            <p>给定向量 ω = [ω₁, ω₂, ω₃]ᵀ，对应反对称矩阵：</p>
+                            <p>[ω]× = [  0   -ω₃   ω₂  ]</p>
+                            <p>           [ ω₃    0   -ω₁  ]</p>
+                            <p>           [-ω₂   ω₁    0   ]</p>
+                            <p>这就是 so(3) ≅ ℝ³ 的原因！</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 第四部分：李括号的起源 -->
+            <div class="topic-section">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <h2>四、李括号的起源</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="topic-content">
+                    <div class="sub-topic">
+                        <h3>4.1 问题：如何在切空间中定义乘法？</h3>
+                        <div class="question-box">
+                            <div class="question-title">
+                                <span class="question-icon">?</span>
+                                为什么需要李括号？
+                            </div>
+                            <p>群中有乘法运算 G × G → G。李代数作为切空间，如何保持这种"乘法"的结构？</p>
+                        </div>
+                        <div class="derivation">
+                            <div class="derivation-title">推导：群乘法 → 李括号</div>
+                            <p>考虑两个群元素 g, h 的交换子：</p>
+                            <p>[g, h] = ghg⁻¹h⁻¹</p>
+                            <p>这衡量了g和h的"不可交换程度"。</p>
+                            <p>现在取 g = exp(sX), h = exp(tY)，并在s=t=0处展开：</p>
+                            <p>[exp(sX), exp(tY)] = st[X, Y] + O(s², t²)</p>
+                            <p>其中 [X, Y] = XY - YX 定义了李括号！</p>
+                        </div>
+                        <div class="conclusion">
+                            <div class="conclusion-title">结论</div>
+                            <p>李括号 <span class="highlight">[X, Y] = XY - YX</span> 是群交换子在单位元处的"导数"，它描述了两个切方向的"不可交换程度"。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>4.2 为什么需要雅可比恒等式？</h3>
+                        <div class="question-box">
+                            <div class="question-title">
+                                <span class="question-icon">?</span>
+                                雅可比恒等式的本质
+                            </div>
+                            <p>雅可比恒等式确保李括号与群结构保持一致。它保证了：李括号描述的"不可交换性"在群中是自洽的。</p>
+                        </div>
+                        <div class="derivation">
+                            <div class="derivation-title">从群结合律推导雅可比恒等式</div>
+                            <p>考虑三个群元素 g, h, k，考虑嵌套交换子：</p>
+                            <p>[g, [h, k]] + [h, [k, g]] + [k, [g, h]]</p>
+                            <p>展开后，所有四次项和更高次项相消，只剩下：</p>
+                            <p>= [X, [Y, Z]] + [Y, [Z, X]] + [Z, [X, Y]]</p>
+                            <p>这必须恒等于0，否则群结构会矛盾！</p>
+                        </div>
+                        <div class="geometry-box">
+                            <div class="geometry-title">几何意义</div>
+                            <p>雅可比恒等式的几何含义：</p>
+                            <p>• 考虑三条切向量 X, Y, Z</p>
+                            <p>• 沿X移动，再沿[Y,Z]移动</p>
+                            <p>• 与沿[Y,[Z,X]] + [Z,[X,Y]]移动结果相同</p>
+                            <p>• 这是流形上"平行移动"的自洽性条件</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>4.3 验证反对称性</h3>
+                        <div class="step-box">
+                            <div class="step-title">从定义直接验证</div>
+                            <p class="step-content">[X, Y] = XY - YX</p>
+                            <p class="step-content">[Y, X] = YX - XY = -(XY - YX) = -[X, Y]</p>
+                            <p class="step-content">✓ 反对称性自然满足！</p>
+                        </div>
+                        <div class="step-box">
+                            <div class="step-title">从几何理解反对称性</div>
+                            <p class="step-content">如果先沿X再沿Y，与先沿Y再沿X的差异是 [X,Y]</p>
+                            <p class="step-content">反过来，差异是 [Y,X]</p>
+                            <p class="step-content">两次差异应该是相反的：-[X,Y]</p>
+                            <p class="step-content">✓ 这正是反对称性的几何含义！</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 第五部分：指数映射 -->
+            <div class="topic-section">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <h2>五、指数映射</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="topic-content">
+                    <div class="sub-topic">
+                        <h3>5.1 为什么需要指数映射？</h3>
+                        <div class="motivation-box">
+                            <div class="motivation-title">连接切空间与流形</div>
+                            <p>李代数（切空间）是线性的，李群（非线性流形）是弯曲的。指数映射告诉我们：沿切方向走多远会到达流形上的哪一点。</p>
+                        </div>
+                        <div class="derivation">
+                            <div class="derivation-title">从微分方程推导</div>
+                            <p>考虑微分方程：dR/dt = K·R, R(0) = I</p>
+                            <p>解为：R(t) = exp(tK)</p>
+                            <p>这是泰勒展开：exp(tK) = I + tK + (tK)²/2! + ...</p>
+                            <p>当 t = 1 时，exp(K) ∈ SO(3)</p>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">Rodrigues公式</div>
+                            <p>给定旋转向量 ω = θ·u（θ为模长，u为单位向量）</p>
+                            <p>R = exp([ω]×) = cos(θ)I + (1-cos(θ))uuᵀ + sin(θ)[u]×</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>5.2 完整的Rodrigues公式推导</h3>
+                        <div class="step-box">
+                            <div class="step-title">步骤1：反对称矩阵的幂次规律</div>
+                            <p class="step-content">设 K = [u]×，则 K² = uuᵀ - I（正交性）</p>
+                            <p class="step-content">K³ = K²K = (uuᵀ - I)K = u(uᵀK) - K = -K</p>
+                            <p class="step-content">K⁴ = -K² = I - uuᵀ</p>
+                            <p class="step-content">K⁵ = K</p>
+                            <p class="step-content">循环周期为4！</p>
+                        </div>
+                        <div class="step-box">
+                            <div class="step-title">步骤2：泰勒展开并分组</div>
+                            <p class="step-content">exp(θK) = I + θK + θ²K²/2! + θ³K³/3! + θ⁴K⁴/4! + ...</p>
+                            <p class="step-content">= I + (θ - θ³/3! + θ⁵/5! - ...)K + (θ²/2! - θ⁴/4! + ...)K²</p>
+                            <p class="step-content">= I + sin(θ)K + (1-cos(θ))K²</p>
+                        </div>
+                        <div class="step-box">
+                            <div class="step-title">步骤3：代入K和K²</div>
+                            <p class="step-content">K = [u]×, K² = uuᵀ - I</p>
+                            <p class="step-content">exp(θK) = I + sin(θ)[u]× + (1-cos(θ))(uuᵀ - I)</p>
+                            <p class="step-content">= cos(θ)I + (1-cos(θ))uuᵀ + sin(θ)[u]×</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 新增：SO(2)和SO(3)的几何可视化 -->
+            <div class="topic-section">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <h2>六、SO(n)的几何形状</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="topic-content">
+                    <div class="sub-topic">
+                        <h3>7.1 SO(2)：圆周流形</h3>
+                        <div class="motivation-box">
+                            <div class="motivation-title">SO(2)是什么？</div>
+                            <p>SO(2)是二维平面上的旋转群，描述了所有保持原点不变的旋转。</p>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">SO(2)的定义</div>
+                            <p>SO(2) = { R ∈ ℝ²ˣ² | RᵀR = I, det(R) = 1 }</p>
+                            <p>其中旋转矩阵为：</p>
+                            <p>R(θ) = [cos(θ)  -sin(θ)]</p>
+                            <p>            [sin(θ)   cos(θ)]</p>
+                        </div>
+                        <div class="geometry-box">
+                            <div class="geometry-title">几何直观：圆周 S¹</div>
+                            <p>SO(2)的几何形状是一个<span class="highlight">圆周 S¹</span>：</p>
+                            <p>• 圆周上的每一点代表一个旋转角度 θ</p>
+                            <p>• 角度 θ ∈ [0, 2π)</p>
+                            <p>• θ = 0 和 θ = 2π 是同一点（单位元）</p>
+                            <p>• SO(2)是<span class="highlight">1维流形</span></p>
+                        </div>
+                        <div class="step-box">
+                            <div class="step-title">可视化说明</div>
+                            <p class="step-content">右侧蓝色圆环代表SO(2)流形。</p>
+                            <p class="step-content">绿色箭头表示当前旋转角度在圆周上的位置。</p>
+                            <p class="step-content">旋转立方体来观察SO(2)的作用效果。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>7.2 SO(3)：实心球流形</h3>
+                        <div class="motivation-box">
+                            <div class="motivation-title">SO(3)是什么？</div>
+                            <p>SO(3)是三维空间中的旋转群，描述了所有保持原点不变的3D旋转。</p>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">SO(3)的定义</div>
+                            <p>SO(3) = { R ∈ ℝ³ˣ³ | RᵀR = I, det(R) = 1 }</p>
+                            <p>• 维度：3维（3个自由度）</p>
+                            <p>• SO(3) ≅ RP³（实投影3空间）</p>
+                        </div>
+                        <div class="geometry-box">
+                            <div class="geometry-title">几何直观：实心球模型</div>
+                            <p>SO(3)可以可视化为一个<span class="highlight">实心球</span>：</p>
+                            <p>• 球面上每一点代表一个<span class="highlight">旋转轴方向</span></p>
+                            <p>• 从原点到该点的<span class="highlight">距离</span>代表旋转角度 θ</p>
+                            <p>• θ = 0 在球心（单位元，无旋转）</p>
+                            <p>• 球面上 θ = π（最大旋转角度）</p>
+                            <p>• <span class="highlight">对径点等同</span>：旋转θ关于轴u = 旋转(2π-θ)关于轴-u</p>
+                        </div>
+                        <div class="step-box">
+                            <div class="step-title">球面点与旋转的对应</div>
+                            <p class="step-content">球面上点 P = (x, y, z) 对应：</p>
+                            <p class="step-content">• 旋转轴：u = P / ||P||（方向）</p>
+                            <p class="step-content">• 旋转角度：θ = π × ||P||（距离）</p>
+                            <p class="step-content">• 例如：北极点 → 绕Z轴旋转π弧度</p>
+                        </div>
+                        <div class="derivation">
+                            <div class="derivation-title">为什么是实心球？</div>
+                            <p>SO(3)由3个参数描述（3个自由度）：</p>
+                            <p>• 2个参数确定旋转轴方向（在球面上）</p>
+                            <p>• 1个参数确定旋转角度（从0到π）</p>
+                            <p>这正是3维实心球的结构！</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>7.3 SO(2)与SO(3)的关系</h3>
+                        <div class="formula-box">
+                            <div class="formula-title">维度和结构</div>
+                            <p>SO(2)：1维流形 ≅ S¹（圆周）</p>
+                            <p>SO(3)：3维流形 ≅ RP³（实投影空间）</p>
+                        </div>
+                        <div class="geometry-box">
+                            <div class="geometry-title">包含关系</div>
+                            <p>SO(2) ⊂ SO(3)</p>
+                            <p>• SO(3)包含绕任意轴的旋转</p>
+                            <p>• SO(2)只包含绕Z轴的旋转</p>
+                            <p>• 在SO(3)中，SO(2)是一个<span class="highlight">子流形</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>7.4 更高维度的SO(n)</h3>
+                        <div class="formula-box">
+                            <div class="formula-title">SO(n)的维度</div>
+                            <p>dim(SO(n)) = n(n-1)/2</p>
+                            <p>• SO(1)：0维（只有单位元）</p>
+                            <p>• SO(2)：1维（S¹）</p>
+                            <p>• SO(3)：3维（RP³）</p>
+                            <p>• SO(4)：6维</p>
+                            <p>• SO(n)：n(n-1)/2维</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 第六部分：总结 -->
+            <div class="topic-section">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <h2>七、完整图景</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="topic-content">
+                    <div class="sub-topic">
+                        <h3>6.1 各概念之间的关系</h3>
+                        <div class="formula-box">
+                            <div class="formula-title">SO(3) ↔ so(3) 的桥梁</div>
+                            <p>旋转向量 ω ∈ ℝ³ ≅ so(3)</p>
+                            <p>⇅ 指数映射</p>
+                            <p>旋转矩阵 R ∈ SO(3)</p>
+                        </div>
+                        <div class="geometry-box">
+                            <div class="geometry-title">完整图景</div>
+                            <p>• <span class="highlight">群结构</span>：描述旋转的组合 R₁·R₂</p>
+                            <p>• <span class="highlight">流形结构</span>：描述旋转的连续变化</p>
+                            <p>• <span class="highlight">切空间</span>：在单位元处的线性近似</p>
+                            <p>• <span class="highlight">李括号</span>：线性化的"不可交换性"</p>
+                            <p>• <span class="highlight">指数映射</span>：连接线性与非线性</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>6.2 核心公式总结</h3>
+                        <div class="formula-box">
+                            <div class="formula-title">so(3)的定义</div>
+                            <p>so(3) = { K ∈ ℝ³ˣ³ | Kᵀ = -K }</p>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">李括号</div>
+                            <p>[X, Y] = XY - YX</p>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">Rodrigues公式</div>
+                            <p>R = cos(θ)I + (1-cos(θ))uuᵀ + sin(θ)[u]×</p>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">指数映射</div>
+                            <p>exp(K) = I + K + K²/2! + K³/3! + ...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <h2>八、从叉积到反对称矩阵</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="topic-content">
+                    <div class="sub-topic">
+                        <h3>7.1 问题起源：如何用矩阵表示叉积？</h3>
+                        <p>我们知道3D空间中两个向量的叉积：</p>
+                        <div class="formula-box">
+                            <div class="formula-title">叉积公式</div>
+                            <p>ω × v = <span class="matrix">⎛ ω₂v₃ - ω₃v₂ ⎞</span></p>
+                            <p>      <span class="matrix">⎜ ω₃v₁ - ω₁v₃ ⎟</span></p>
+                            <p>      <span class="matrix">⎝ ω₁v₂ - ω₂v₁ ⎠</span></p>
+                        </div>
+                        <p><strong>问题</strong>：能否把叉积写成矩阵乘法的形式 <strong>[ω]× · v</strong> ？</p>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>7.2 推导过程</h3>
+                        <p>设 [ω]× 是一个 3×3 矩阵，满足 [ω]× · v = ω × v</p>
+                        <div class="formula-box">
+                            <div class="formula-title">矩阵乘法展开</div>
+                            <p><span class="matrix">⎛ a₁₁ a₁₂ a₁₃ ⎞</span> <span class="matrix">⎛ v₁ ⎞</span>   <span class="matrix">⎛ ω₂v₃ - ω₃v₂ ⎞</span></p>
+                            <p><span class="matrix">⎜ a₂₁ a₂₂ a₂₃ ⎟</span> <span class="matrix">⎜ v₂ ⎟</span> = <span class="matrix">⎜ ω₃v₁ - ω₁v₃ ⎟</span></p>
+                            <p><span class="matrix">⎝ a₃₁ a₃₂ a₃₃ ⎠</span> <span class="matrix">⎝ v₃ ⎠</span>   <span class="matrix">⎝ ω₁v₂ - ω₂v₁ ⎠</span></p>
+                        </div>
+                        <p>计算第一行：a₁₁v₁ + a₁₂v₂ + a₁₃v₃ = ω₂v₃ - ω₃v₂</p>
+                        <p>匹配系数：a₁₁ = 0, a₁₂ = -ω₃, a₁₃ = ω₂</p>
+                        <p>对其他行做同样推导，得到：</p>
+                        <div class="formula-box">
+                            <div class="formula-title">反对称矩阵</div>
+                            <p>[ω]× = <span class="matrix">⎛    0  -ω₃  ω₂ ⎞</span></p>
+                            <p>      <span class="matrix">⎜  ω₃     0  -ω₁ ⎟</span></p>
+                            <p>      <span class="matrix">⎝ -ω₂  ω₃     0  ⎠</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>7.3 关键性质：反对称性</h3>
+                        <p>观察矩阵的转置：</p>
+                        <div class="formula-box">
+                            <div class="formula-title">反对称性证明</div>
+                            <p>[ω]×<sup>T</sup> = <span class="matrix">⎛    0   ω₃  -ω₂ ⎞</span></p>
+                            <p>           <span class="matrix">⎜ -ω₃     0   ω₁ ⎟</span> = -[ω]×</p>
+                            <p>           <span class="matrix">⎝  ω₂  -ω₃     0  ⎠</span></p>
+                        </div>
+                        <p><strong>定义</strong>：满足 K<sup>T</sup> = -K 的矩阵称为<strong>反对称矩阵</strong></p>
+                        <p>这就是 so(3) 的定义：</p>
+                        <div class="formula-box">
+                            <div class="formula-title">so(3)的定义</div>
+                            <p>so(3) = { K ∈ ℝ³ˣ³ | K<sup>T</sup> = -K }</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>7.4 为什么会有这个同构？</h3>
+                        <p><strong>叉积的基本性质</strong>：</p>
+                        <div class="geometry-box">
+                            <p>• 线性性：a × (b + c) = a × b + a × c</p>
+                            <p>• 反对称性：a × b = -b × a</p>
+                            <p>• 自反性：a × a = 0</p>
+                        </div>
+                        <p><strong>莱布尼茨法则</strong>：对于旋转矩阵 R(t) = exp(tK)</p>
+                        <p>R 是正交矩阵 (R<sup>T</sup>R = I) ⇔ K<sup>T</sup> + K = 0 ⇔ K 是反对称矩阵</p>
+                        <div class="formula-box">
+                            <div class="formula-title">直观理解</div>
+                            <p>绕轴 u 旋转无穷小角度 dθ：</p>
+                            <p>R = I + dθ · [u]× + O(dθ²)</p>
+                            <p>• I 恒等变换</p>
+                            <p>• [u]× 无穷小旋转的生成元</p>
+                            <p>• 反对称性保证 R 是正交矩阵</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>7.5 三维空间的特殊性</h3>
+                        <div class="geometry-box">
+                            <div class="geometry-title">维度对比</div>
+                            <p><strong>3维空间</strong>：</p>
+                            <p>• so(3) 有 3 个独立分量 (ω₁, ω₂, ω₃)</p>
+                            <p>• 恰好与 ℝ³ 同构！</p>
+                            <p class="highlight">→ 这就是 ℝ³ ≅ so(3) 的原因</p>
+                            <p><strong>4维空间</strong>：</p>
+                            <p>• so(4) 有 6 个独立分量</p>
+                            <p>• 不能用 ℝ⁴ 向量表示</p>
+                        </div>
+                        <p>所以这个同构是 <strong>3维空间独特的性质</strong>！</p>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>7.6 总结：推导链</h3>
+                        <div class="formula-box">
+                            <div class="formula-title">从叉积到李代数</div>
+                            <p>① 叉积 ω × v 是线性的</p>
+                            <p>② 写成矩阵乘法 [ω]× · v</p>
+                            <p>③ 逐项匹配系数，得到 [ω]×</p>
+                            <p>④ 发现 [ω]×<sup>T</sup> = -[ω]× （反对称）</p>
+                            <p>⑤ 推广：反对称矩阵集合就是 so(3)</p>
+                            <p class="highlight">⑥ 结论：ℝ³ ≅ so(3)（3维特有）</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <h2>八、反对称矩阵 vs 正交矩阵</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="topic-content">
+                    <div class="sub-topic">
+                        <h3>8.1 直观对比</h3>
+                        <div class="formula-box">
+                            <div class="formula-title">两种矩阵的区别</div>
+                            <table style="width: 100%; text-align: left; margin: 10px 0;">
+                                <tr style="border-bottom: 1px solid #333;">
+                                    <th style="padding: 5px;"></th>
+                                    <th style="padding: 5px; color: #e94560;">反对称矩阵 K</th>
+                                    <th style="padding: 5px; color: #4ecdc4;">正交矩阵 R</th>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px;">是什么</td>
+                                    <td style="padding: 5px;">旋转的"生成元"</td>
+                                    <td style="padding: 5px;">旋转本身</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px;">数学性质</td>
+                                    <td style="padding: 5px;">K<sup>T</sup> = -K</td>
+                                    <td style="padding: 5px;">R<sup>T</sup>R = I, det(R) = 1</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px;">参数个数</td>
+                                    <td style="padding: 5px;">3 维</td>
+                                    <td style="padding: 5px;">3 维流形</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px;">几何意义</td>
+                                    <td style="padding: 5px;">切空间（线性近似）</td>
+                                    <td style="padding: 5px;">流形本身</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px;">类比</td>
+                                    <td style="padding: 5px;">速度</td>
+                                    <td style="padding: 5px;">位置</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <p><strong>一句话总结</strong>：</p>
+                        <p>• <span style="color: #e94560;">K = 旋转的速度/方向</span></p>
+                        <p>• <span style="color: #4ecdc4;">R = 旋转的结果</span></p>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>8.2 能否互相转化？</h3>
+                        <p><strong>答案：可以！通过指数映射</strong></p>
+                        <div class="formula-box">
+                            <div class="formula-title">指数映射</div>
+                            <p>R = exp(K) = I + K + K²/2! + K³/3! + ⋯</p>
+                            <p>这就是著名的 <strong>Rodrigues 公式</strong></p>
+                        </div>
+                        <div class="geometry-box">
+                            <div class="geometry-title">直观理解</div>
+                            <p>K（反对称矩阵） ───── 指数映射（积分/累加）─────→ R（正交矩阵）</p>
+                            <p style="margin-top: 10px;">类比：</p>
+                            <p>• 速度 → 位置（积分）</p>
+                            <p>• 角速度 → 角度（积分）</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>8.3 完整图景</h3>
+                        <div class="formula-box">
+                            <div class="formula-title">李群与李代数的关系</div>
+                            <p style="text-align: center; margin: 15px 0;">
+                                ┌─────────────────────────────────────────┐<br>
+                                │    李代数 so(3)    →    李群 SO(3)     │<br>
+                                │    （线性空间 ℝ³）  指数映射  （非线性流形）│<br>
+                                │           │                    │          │<br>
+                                │           │    K = [ω]×        │          │<br>
+                                │           └────────────────────┘          │<br>
+                                │           "无穷小旋转"                   │<br>
+                                │           "旋转的速度"                   │<br>
+                                │                                        │<br>
+                                │    so(3) ⊕ so(3) = so(3)  ✓           │<br>
+                                │    SO(3) ⊕ SO(3) = ?      ❌           │<br>
+                                └─────────────────────────────────────────┘
+                            </p>
+                        </div>
+                        <p><strong>为什么需要两层结构？</strong></p>
+                        <p>SO(3) 是弯曲的，不能直接"相加"；</p>
+                        <p>但它的切空间 so(3) 是直线，可以相加。</p>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>8.4 具体例子</h3>
+                        <p><strong>输入</strong>：旋转向量 ω = (1, 0, 0)（绕 X 轴）</p>
+                        <p><strong>构造反对称矩阵</strong>：</p>
+                        <div class="formula-box">
+                            <div class="formula-title">反对称矩阵</div>
+                            <p>K = [ω]× = <span class="matrix">⎛ 0   0    0 ⎞</span></p>
+                            <p>           <span class="matrix">⎜ 0   0   -1 ⎟</span></p>
+                            <p>           <span class="matrix">⎝ 0   1    0 ⎠</span></p>
+                        </div>
+                        <p><strong>指数映射</strong>：</p>
+                        <div class="formula-box">
+                            <div class="formula-title">旋转矩阵</div>
+                            <p>R = exp(K) = <span class="matrix">⎛ 1    0        0     ⎞</span></p>
+                            <p>               <span class="matrix">⎜ 0  cosθ   -sinθ  ⎟</span></p>
+                            <p>               <span class="matrix">⎝ 0  sinθ    cosθ  ⎠</span></p>
+                            <p style="margin-top: 10px;">其中 θ = ||ω|| = 1 弧度</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>8.5 应用场景</h3>
+                        <div class="geometry-box">
+                            <table style="width: 100%; text-align: left;">
+                                <tr style="border-bottom: 1px solid #333;">
+                                    <th style="padding: 5px;">应用场景</th>
+                                    <th style="padding: 5px;">使用哪个</th>
+                                    <th style="padding: 5px;">为什么</th>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px;">机器人控制</td>
+                                    <td style="padding: 5px;">指数映射</td>
+                                    <td style="padding: 5px;">关节速度直接相加</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px;">姿态插值</td>
+                                    <td style="padding: 5px;">指数映射</td>
+                                    <td style="padding: 5px;">SLERP 算法的基础</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px;">优化问题</td>
+                                    <td style="padding: 5px;">李代数</td>
+                                    <td style="padding: 5px;">梯度可以在切空间中计算</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px;">表示旋转</td>
+                                    <td style="padding: 5px;">旋转矩阵</td>
+                                    <td style="padding: 5px;">最终需要矩阵输出</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>8.6 总结</h3>
+                        <div class="formula-box">
+                            <div class="formula-title">反对称矩阵 ↔ 正交矩阵</div>
+                            <p>┌────────────────────────────────────────────────────────────┐</p>
+                            <p>│                                                            │</p>
+                            <p>│   反对称矩阵 K        指数映射        正交矩阵 R            │</p>
+                            <p>│   (3维向量)      ─────────────→     (3×3矩阵)              │</p>
+                            <p>│                                                            │</p>
+                            <p>│   线性空间              +             非线性流形            │</p>
+                            <p>│   可以加减                            描述实际旋转            │</p>
+                            <p>│                                                            │</p>
+                            <p>│   "旋转的速度"                      "旋转的结果"           │</p>
+                            <p>│                                                            │</p>
+                            <p>└────────────────────────────────────────────────────────────┘</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <h2>九、矩阵指数函数</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="topic-content">
+                    <div class="sub-topic">
+                        <h3>9.1 矩阵指数的定义</h3>
+                        <p><strong>问题</strong>：矩阵指数 $\exp(A)$ 只是标量指数的类比吗？</p>
+                        <p><strong>答案</strong>：不完全是！它有严格的数学定义。</p>
+                        <div class="formula-box">
+                            <div class="formula-title">矩阵指数的定义</div>
+                            <p><strong>定义</strong>：对于任意方阵 A，定义</p>
+                            <p style="margin-top: 10px;">$$\exp(A) = \sum_{n=0}^{\infty} \frac{A^n}{n!} = I + A + \frac{A^2}{2!} + \frac{A^3}{3!} + \cdots$$</p>
+                            <p style="margin-top: 15px;">其中 $A^n$ 表示 n 次矩阵乘法，$0! = 1$。</p>
+                        </div>
+                        <div class="geometry-box">
+                            <div class="geometry-title">为什么可以这样定义？</div>
+                            <p>1. 矩阵的加法和乘法满足结合律、分配律</p>
+                            <p>2. 矩阵范数的完备性保证级数收敛</p>
+                            <p>3. 这不是"类比"，而是泰勒级数在函数空间的自然推广</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>9.2 从微分方程出发的推导</h3>
+                        <p><strong>核心观点</strong>：指数函数可以用微分方程定义</p>
+                        <div class="formula-box">
+                            <div class="formula-title">标量情况的微分方程</div>
+                            <p>$$\frac{d}{dt}e^{kt} = k \cdot e^{kt}, \quad e^{k\cdot 0} = 1$$</p>
+                        </div>
+                        <p><strong>推广到矩阵</strong>：</p>
+                        <div class="formula-box">
+                            <div class="formula-title">矩阵微分方程</div>
+                            <p>$$\frac{d}{dt}\exp(Kt) = K \cdot \exp(Kt), \quad \exp(K\cdot 0) = I$$</p>
+                            <p style="margin-top: 10px;">其中 K 是常数矩阵。</p>
+                        </div>
+                        <p><strong>物理意义</strong>：</p>
+                        <div class="geometry-box">
+                            <p>• 这描述了一个"流"（flow）</p>
+                            <p>• 起点在 $t=0$ 处的 $I$</p>
+                            <p>• 速度场由 $K$ 决定</p>
+                            <p>• 解这个方程就得到 $\exp(Kt)$</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>9.3 泰勒级数的严格推导</h3>
+                        <p><strong>步骤 1</strong>：假设解可以写成幂级数</p>
+                        <div class="formula-box">
+                            <div class="formula-title">幂级数假设</div>
+                            <p>$$f(t) = \sum_{n=0}^{\infty} a_n t^n$$</p>
+                        </div>
+                        <p><strong>步骤 2</strong>：代入微分方程</p>
+                        <p>$$\frac{df}{dt} = K f(t)$$</p>
+                        <p>$$\sum_{n=1}^{\infty} n a_n t^{n-1} = K \sum_{n=0}^{\infty} a_n t^n$$</p>
+                        <p><strong>步骤 3</strong>：比较系数</p>
+                        <p>$$a_1 = K a_0$$</p>
+                        <p>$$2a_2 = K a_1 \Rightarrow a_2 = \frac{K^2}{2!} a_0$$</p>
+                        <p>$$3a_3 = K a_2 \Rightarrow a_3 = \frac{K^3}{3!} a_0$$</p>
+                        <p>...</p>
+                        <p><strong>步骤 4</strong>：得到通项</p>
+                        <p>$$a_n = \frac{K^n}{n!} a_0$$</p>
+                        <p><strong>步骤 5</strong>：由初始条件 $f(0) = I$ 得 $a_0 = I$</p>
+                        <div class="formula-box">
+                            <div class="formula-title">最终结果</div>
+                            <p>$$f(t) = \exp(Kt) = \sum_{n=0}^{\infty} \frac{(Kt)^n}{n!}$$</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>9.4 反对称矩阵的指数展开</h3>
+                        <p>对于 $K^\top = -K$，有特殊性质：</p>
+                        <div class="geometry-box">
+                            <div class="geometry-title">奇偶次幂的性质</div>
+                            <p>• $K^1$：反对称矩阵</p>
+                            <p>• $K^2$：对称矩阵（因为 $(K^2)^\top = K^\top K^\top = (-K)(-K) = K^2$）</p>
+                            <p>• $K^3$：反对称矩阵</p>
+                            <p>• $K^4$：对称矩阵</p>
+                            <p>...</p>
+                            <p style="margin-top: 10px;"><strong>规律</strong>：奇次幂是反对称的，偶次幂是对称的</p>
+                        </div>
+                        <p><strong>分组展开</strong>：</p>
+                        <div class="formula-box">
+                            <div class="formula-title">奇偶分组</div>
+                            <p>$$\exp(K) = \underbrace{I + \frac{K^2}{2!} + \frac{K^4}{4!} + \cdots}_{\text{对称部分}} + \underbrace{K + \frac{K^3}{3!} + \frac{K^5}{5!} + \cdots}_{\text{反对称部分}}$$</p>
+                        </div>
+                        <p>这正是罗德里格斯公式的来源！</p>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>9.5 几何意义</h3>
+                        <div class="geometry-box">
+                            <div class="geometry-title">从恒等到有限旋转</div>
+                            <p style="text-align: center; margin: 15px 0;">
+                                ┌──────────────────────────────────────────────┐<br>
+                                │                                              │<br>
+                                │   t = 0:   exp(K·0) = I        （恒等变换）  │<br>
+                                │                                              │<br>
+                                │   t 很小: I + tK              （一阶近似）  │<br>
+                                │                                              │<br>
+                                │   t 增大: 累加所有高阶项                    │<br>
+                                │                                              │<br>
+                                │   t = θ:  exp(Kθ) = R         （有限旋转）  │<br>
+                                │                                              │<br>
+                                └──────────────────────────────────────────────┘
+                            </p>
+                        </div>
+                        <p><strong>类比</strong>：</p>
+                        <p>• 标量：$e^{kt}$ 从 1 增长到 $e^{kT}$</p>
+                        <p>• 矩阵：$\exp(Kt)$ 从 $I$ "流动"到 $R$</p>
+                    </div>
+                    
+                    <div class="sub-topic">
+                        <h3>9.6 总结</h3>
+                        <div class="formula-box">
+                            <div class="formula-title">矩阵指数的核心要点</div>
+                            <p>┌─────────────────────────────────────────────────────────────────┐</p>
+                            <p>│                                                                 │</p>
+                            <p>│  1. 定义来源：泰勒级数 + 微分方程                                 │</p>
+                            <p>│                                                                 │</p>
+                            <p>│  2. 不是单纯的类比，而是函数空间中的自然推广                     │</p>
+                            <p>│                                                                 │</p>
+                            <p>│  3. 微分方程定义：                                              │</p>
+                            <p>│     d/dt exp(Kt) = K · exp(Kt),  exp(K·0) = I                  │</p>
+                            <p>│                                                                 │</p>
+                            <p>│  4. 几何意义：从恒等出发，沿切方向"积分"得到有限变换            │</p>
+                            <p>│                                                                 │</p>
+                            <p>│  5. 对于 so(3)：连接李代数与李群的核心桥梁                       │</p>
+                            <p>│                                                                 │</p>
+                            <p>└─────────────────────────────────────────────────────────────────┘</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="right-panel">
+            <div class="visualization-tabs">
+                <button class="tab-btn active" data-tab="rotation">旋转效果</button>
+                <button class="tab-btn" data-tab="manifold">流形可视化</button>
+                <button class="tab-btn" data-tab="algebra">李代数可视化</button>
+            </div>
+            
+            <div class="visualization-container">
+                <div id="rotation-panel" class="tab-panel active">
+                    <div class="visualization-header">
+                        <h3>旋转向量的3D旋转效果</h3>
+                        <div class="visualization-buttons">
+                            <button id="calculateBtn" class="btn">显示计算</button>
+                            <button id="resetBtn" class="btn">重置</button>
+                            <button id="animateBtn" class="btn">动画</button>
+                        </div>
+                    </div>
+                    <div id="canvas-container"></div>
+                    <div class="camera-controls-hint">
+                        <span>🖱️ 左键拖动旋转</span>
+                        <span>🖱️ 右键拖动平移</span>
+                        <span>🖱️ 滚轮缩放</span>
+                    </div>
+                </div>
+                
+                <div id="manifold-panel" class="tab-panel">
+                    <div class="visualization-header">
+                        <h3>SO(n)流形结构</h3>
+                        <div class="manifold-buttons">
+                            <button id="so2Btn" class="manifold-btn active">SO(2)</button>
+                            <button id="so3Btn" class="manifold-btn">SO(3)</button>
+                        </div>
+                    </div>
+                    <div id="manifold-canvas-container"></div>
+                    <div class="camera-controls-hint">
+                        <span>🖱️ 左键拖动旋转</span>
+                        <span>🖱️ 右键拖动平移</span>
+                        <span>🖱️ 滚轮缩放</span>
+                    </div>
+                </div>
+                
+                <div id="algebra-panel" class="tab-panel">
+                    <div class="visualization-header">
+                        <h3>李代数 so(n) - 切空间可视化</h3>
+                        <div class="manifold-buttons">
+                            <button id="so2AlgebraBtn" class="manifold-btn active">so(2)</button>
+                            <button id="so3AlgebraBtn" class="manifold-btn">so(3)</button>
+                            <button id="algebraAnimateBtn" class="btn">动画</button>
+                        </div>
+                    </div>
+                    <div id="algebra-canvas-container"></div>
+                    <div class="camera-controls-hint">
+                        <span>🖱️ 左键拖动旋转</span>
+                        <span>🖱️ 右键拖动平移</span>
+                        <span>🖱️ 滚轮缩放</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="controls-panel">
+                <h3>旋转向量控制</h3>
+                <div class="control-group">
+                    <label>ω₁ (X轴):</label>
+                    <input type="range" id="rx" min="-3.14" max="3.14" step="0.01" value="0">
+                    <input type="number" id="rx-num" value="0.00" step="0.01">
+                </div>
+                <div class="control-group">
+                    <label>ω₂ (Y轴):</label>
+                    <input type="range" id="ry" min="-3.14" max="3.14" step="0.01" value="0">
+                    <input type="number" id="ry-num" value="0.00" step="0.01">
+                </div>
+                <div class="control-group">
+                    <label>ω₃ (Z轴):</label>
+                    <input type="range" id="rz" min="-3.14" max="3.14" step="0.01" value="0">
+                    <input type="number" id="rz-num" value="0.00" step="0.01">
+                </div>
+            </div>
+            
+            <div id="algebra-controls-panel" style="display: none;">
+                <h3>李代数向量控制</h3>
+                <div class="control-group">
+                    <label>ω₁ (X轴):</label>
+                    <input type="range" id="algebra-rx" min="-2" max="2" step="0.01" value="1">
+                    <input type="number" id="algebra-rx-num" value="1.00" step="0.01">
+                </div>
+                <div class="control-group">
+                    <label>ω₂ (Y轴):</label>
+                    <input type="range" id="algebra-ry" min="-2" max="2" step="0.01" value="0">
+                    <input type="number" id="algebra-ry-num" value="0.00" step="0.01">
+                </div>
+                <div class="control-group">
+                    <label>ω₃ (Z轴):</label>
+                    <input type="range" id="algebra-rz" min="-2" max="2" step="0.01" value="0">
+                    <input type="number" id="algebra-rz-num" value="0.00" step="0.01">
+                </div>
+            </div>
+            
+            <div id="calculation-panel">
+                <h3>计算过程</h3>
+                <div id="calculation-content">
+                    <div class="calc-step">旋转向量 ω = [ω₁, ω₂, ω₃]ᵀ 控制旋转</div>
+                    <div class="calc-step">点击"显示计算"查看完整推导过程</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.150.1/examples/jsm/"
+        }
+    }
+    </script>
+    <script src="lie-algebra.js"></script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        
+        window.THREE = THREE;
+        window.OrbitControls = OrbitControls;
+    </script>
+    <script src="app.js"></script>
+</body>
+</html>
