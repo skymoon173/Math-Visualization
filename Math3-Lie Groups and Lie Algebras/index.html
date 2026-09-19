@@ -586,6 +586,29 @@
             font-weight: bold;
             margin-bottom: 6px;
         }
+        /* 窄屏响应式：左右分栏改为上下布局 */
+        @media (max-width: 900px) {
+            body {
+                height: auto;
+                overflow: auto;
+            }
+
+            #container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            #left-panel {
+                width: 100%;
+                max-height: 45vh;
+                border-right: none;
+                border-bottom: 2px solid #0f3460;
+            }
+
+            #right-panel {
+                height: 75vh;
+            }
+        }
     </style>
 </head>
 <body>
@@ -594,6 +617,7 @@
             <div id="header">
                 <h1>李群与李代数可视化</h1>
                 <p>从第一性原理解释数学结构的起源</p>
+                <p style="margin-top:8px;"><a href="../index.html" style="color:#53d8fb;text-decoration:none;font-size:0.85em;">🏠 返回数学可视化项目首页</a></p>
             </div>
             
             <!-- 第一部分：群的基本概念 -->

@@ -5,22 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>黎曼度量可视化计算系统</title>
     <link rel="stylesheet" href="styles-final.css">
-    <script src="mathjax-tex-svg.js" id="MathJax-script" async></script>
     <script>
         window.MathJax = {
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/noundefined']
+            },
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
                 displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                packages: ['base', 'ams', 'noerrors', 'noundefined']
+                packages: { '[+]': ['ams', 'noerrors', 'noundefined'] }
             },
             svg: {
                 fontCache: 'none'  // 避免使用全局字体缓存，防止跟踪保护阻止
-            },
-            startup: {
-                typeset: false,
-                ready: () => {
-                    MathJax.startup.defaultReady();
-                }
             },
             options: {
                 enableMenu: false,  // 禁用菜单，减少存储访问
@@ -29,6 +25,7 @@
             }
         };
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" id="MathJax-script" async></script>
 </head>
 <body>
     <div class="container">
@@ -60,7 +57,6 @@
                     <option value="klein">🎀 克莱因瓶 (Klein Bottle)</option>
                     <option value="paraboloid">📉 抛物面 (Paraboloid)</option>
                     <option value="ellipsoid">🥚 椭球面 (Ellipsoid)</option>
-                    <option value="sphere3D">🌐 3维球面 (3D Sphere)</option>
                 </select>
                 </div>
                 
@@ -272,19 +268,11 @@
         
         <footer>
             <p>📐 黎曼几何计算系统 | 基于微分几何理论</p>
+            <p><a href="../index.html">← 返回数学可视化项目首页</a></p>
         </footer>
     </div>
     
     <script src="detailed-steps.js"></script>
     <script src="riemann-calculator-full.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                if (window.MathJax && MathJax.typesetPromise) {
-                    MathJax.typesetPromise();
-                }
-            }, 500);
-        });
-    </script>
 </body>
 </html>

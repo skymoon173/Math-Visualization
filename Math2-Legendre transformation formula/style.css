@@ -458,3 +458,36 @@ canvas {
         width: 100%;
     }
 }
+
+/* 全站导航栏 */
+.mv-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 18px;
+    padding: 10px 16px;
+    margin-bottom: 20px;
+    background-color: #2c3e50;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.mv-nav a {
+    color: #ecf0f1;
+    text-decoration: none;
+    font-size: 0.95em;
+}
+
+.mv-nav a:hover {
+    color: #3498db;
+    text-decoration: underline;
+}
+
+.mv-nav a.active {
+    color: #f39c12;
+    font-weight: bold;
+}
+
+.mv-nav-sep {
+    color: #7f8c8d;
+}

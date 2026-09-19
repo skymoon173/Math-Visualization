@@ -15,7 +15,6 @@ class RiemannCalculator {
             klein: this.kleinParametrization.bind(this),
             paraboloid: this.paraboloidParametrization.bind(this),
             ellipsoid: this.ellipsoidParametrization.bind(this),
-            sphere3D: this.sphere3DParametrization.bind(this),
             // 1维流形
             circle: this.circleParametrization.bind(this),
             line: this.lineParametrization.bind(this),
@@ -34,7 +33,6 @@ class RiemannCalculator {
             klein: '克莱因瓶是一种闭合的非定向二维流形，不能在三维空间中不自交地嵌入。它是莫比乌斯带的更高维推广。',
             paraboloid: '抛物面是抛物线绕其轴旋转而成的曲面，在光学和天线设计中有很多应用。它具有变化的高斯曲率。',
             ellipsoid: '椭球面是球面的推广，具有三个不同的主轴。它在局部具有正高斯曲率，但在某些点可能是双曲的。',
-            sphere3D: '3维球面是嵌入4D欧几里得空间的3维流形，所有点到球心的距离相等。它是研究高维微分几何的重要例子，在物理中也有应用。',
             // 1维流形
             circle: '圆是最简单的闭合1维流形（曲线）。它是嵌入2D平面的闭合曲线，具有常曲率。在黎曼几何中，圆是研究1维黎曼流形的基础例子。',
             line: '直线是最简单的1维流形，具有零曲率。它是欧几里得1维空间的模型，在局部几何中作为参考标准。',
@@ -151,19 +149,6 @@ class RiemannCalculator {
             x: a * Math.sin(theta) * Math.cos(phi),
             y: b * Math.sin(theta) * Math.sin(phi),
             z: c * Math.cos(theta)
-        };
-    }
-    
-    // 3维球面参数化（嵌入4D空间的3D球面，使用3D投影显示）
-    sphere3DParametrization(u, v) {
-        const theta = u * Math.PI;
-        const phi = v * 2 * Math.PI;
-        const r = 1;
-        // 3D球面嵌入4D空间，这里使用3D投影显示
-        return {
-            x: r * Math.sin(theta) * Math.cos(phi),
-            y: r * Math.sin(theta) * Math.sin(phi),
-            z: r * Math.cos(theta)
         };
     }
 
@@ -329,8 +314,7 @@ class RiemannCalculator {
             mobius: "莫比乌斯带",
             klein: "克莱因瓶",
             paraboloid: "抛物面",
-            ellipsoid: "椭球面",
-            sphere3D: "3维球面"
+            ellipsoid: "椭球面"
         };
 
         let calculationSteps = "";
@@ -1250,8 +1234,7 @@ function drawManifold3D(manifoldType, u, v) {
     switch(manifoldType) {
         case 'sphere':
         case 'ellipsoid':
-        case 'sphere3D':
-            engine3D.drawSurface(paramFunc, [0, 1], [0, 1], 24, 32, 
+            engine3D.drawSurface(paramFunc, [0, 1], [0, 1], 24, 32,
                 (u, v) => {
                     const k = calculator.calculateGaussianCurvature(manifoldType, u, v);
                     const intensity = Math.min(1, Math.max(0.3, 0.5 + k * 0.5));

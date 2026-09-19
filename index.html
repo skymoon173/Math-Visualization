@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数学可视化 | Math Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e8eaed;
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        .page-header {
+            text-align: center;
+            padding: 70px 20px 40px;
+        }
+
+        .page-header h1 {
+            font-size: 2.6em;
+            background: linear-gradient(90deg, #53d8fb, #e94560);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 14px;
+        }
+
+        .page-header p {
+            color: #9aa5b1;
+            font-size: 1.15em;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 26px;
+            max-width: 1180px;
+            margin: 30px auto;
+            padding: 0 24px 60px;
+        }
+
+        .card {
+            background: rgba(22, 33, 62, 0.85);
+            border: 1px solid #0f3460;
+            border-radius: 16px;
+            padding: 30px 26px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: #53d8fb;
+            box-shadow: 0 12px 32px rgba(83, 216, 251, 0.15);
+        }
+
+        .card-icon {
+            font-size: 2.6em;
+            margin-bottom: 14px;
+        }
+
+        .card h2 {
+            font-size: 1.25em;
+            color: #53d8fb;
+            margin-bottom: 4px;
+        }
+
+        .card .en {
+            color: #6b7686;
+            font-size: 0.82em;
+            margin-bottom: 14px;
+        }
+
+        .card p {
+            color: #b8c2cc;
+            font-size: 0.95em;
+            flex: 1;
+        }
+
+        .card .tags {
+            margin-top: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .card .tag {
+            font-size: 0.75em;
+            padding: 3px 10px;
+            border-radius: 999px;
+            background: rgba(83, 216, 251, 0.12);
+            color: #53d8fb;
+            border: 1px solid rgba(83, 216, 251, 0.25);
+        }
+
+        .card .enter {
+            margin-top: 20px;
+            color: #e94560;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+
+        footer {
+            text-align: center;
+            padding: 26px 20px 40px;
+            color: #6b7686;
+            font-size: 0.88em;
+        }
+
+        footer a {
+            color: #53d8fb;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            .page-header { padding: 48px 18px 26px; }
+            .page-header h1 { font-size: 1.9em; }
+        }
+    </style>
+</head>
+<body>
+    <header class="page-header">
+        <h1>∫ 数学可视化 ∑</h1>
+        <p>把抽象的高等数学概念变成可交互的图形：在浏览器中观察度量张量、勒让德变换与李群李代数的几何直观。</p>
+    </header>
+
+    <main class="cards">
+        <a class="card" href="Math1-Riemannian%20Metric%20Calculation%20for%20Smooth%20Manifolds/index.html">
+            <div class="card-icon">📐</div>
+            <h2>黎曼度量可视化计算系统</h2>
+            <div class="en">Riemannian Metric on Smooth Manifolds</div>
+            <p>在球面、环面、莫比乌斯带、克莱因瓶等 13 种流形上实时计算度量张量、基向量、克里斯托弗符号与高斯曲率，并提供 3D 交互可视化。</p>
+            <div class="tags">
+                <span class="tag">微分几何</span>
+                <span class="tag">度量张量</span>
+                <span class="tag">高斯曲率</span>
+                <span class="tag">Canvas 3D</span>
+            </div>
+            <div class="enter">进入应用 →</div>
+        </a>
+
+        <a class="card" href="Math2-Legendre%20transformation%20formula/index.html">
+            <div class="card-icon">🔄</div>
+            <h2>勒让德变换可视化</h2>
+            <div class="en">Legendre Transformation</div>
+            <p>通过切线簇动画理解 g(p) = xp − f(x) 的生成过程，另含几何原理（切线截距）、上确界定义与多元函数推广四个专题页面。</p>
+            <div class="tags">
+                <span class="tag">凸分析</span>
+                <span class="tag">切线截距</span>
+                <span class="tag">上确界</span>
+                <span class="tag">动画演示</span>
+            </div>
+            <div class="enter">进入应用 →</div>
+        </a>
+
+        <a class="card" href="Math3-Lie%20Groups%20and%20Lie%20Algebras/index.html">
+            <div class="card-icon">🌀</div>
+            <h2>李群与李代数可视化</h2>
+            <div class="en">Lie Groups &amp; Lie Algebras</div>
+            <p>基于 Three.js 的 SO(2) / SO(3) 3D 交互：用旋转滑块、指数映射与流形/李代数视图，从第一性原理解释群结构的起源。</p>
+            <div class="tags">
+                <span class="tag">SO(3)</span>
+                <span class="tag">Rodrigues 公式</span>
+                <span class="tag">Three.js</span>
+                <span class="tag">WebGL</span>
+            </div>
+            <div class="enter">进入应用 →</div>
+        </a>
+    </main>
+
+    <footer>
+        <p>纯前端实现 · 无需安装 · 打开即用</p>
+        <p style="margin-top:8px;">Released under the <a href="LICENSE">MIT License</a></p>
+    </footer>
+</body>
+</html>
